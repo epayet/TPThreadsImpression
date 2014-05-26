@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServeurImpression
 {
-    class Serveur
+    public class Document
     {
-
     }
 }
