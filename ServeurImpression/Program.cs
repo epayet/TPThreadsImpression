@@ -11,14 +11,12 @@ namespace ServeurImpression
         static void Main(string[] args)
         {
             Serveur serv = new Serveur();
-            Imprimante Imp = new Imprimante
-            {
-                Nom = "imp1",
-                PagesParMinute = 2
-            };
+            Imprimante Imp = new Imprimante("imp1", 2);
             serv.AjouterImprimante(Imp);
             Document doc = new Document("doc1", new byte[10000]);
             serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc);
+            Document doc2 = new Document("doc2", new byte[10000]);
+            serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc2);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
 
 namespace ServeurImpression
 {
@@ -47,16 +48,6 @@ namespace ServeurImpression
             return null;
         }
 
-        public void AjouterImprimante(Imprimante imprimante)
-        {
-            Imprimantes.Add(imprimante);
-            ImprimanteRunner imprimanteRunner = new ImprimanteRunner
-            {
-                Imprimante = imprimante
-            };
-            Task taskImprimante = new Task(imprimanteRunner.Run);
-        }
-
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
             Imprimante Imp = Imprimantes.First();
@@ -73,5 +64,19 @@ namespace ServeurImpression
             return Imp;
         }
 
+        //Ici un thread qui attend un task, faire un thread qui gère les task
+        public void AjouterImprimante(Imprimante imprimante)
+        {
+            Imprimantes.Add(imprimante);
+            Thread thread = new Thread(() => createTaskAndWaitForIt(imprimante));
+            thread.Start();
+        }
+
+        private void createTaskAndWaitForIt(Imprimante imprimante)
+        {
+            Task<int> taskImprimante = new Task<int>(imprimante.Work);
+            taskImprimante.Start();
+            int waitFor = taskImprimante.Result;
+        }
     }
 }

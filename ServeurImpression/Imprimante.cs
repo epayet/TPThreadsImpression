@@ -16,6 +16,29 @@ namespace ServeurImpression
         public List<Document> DocumentsEnErreur { get; private set; }
         private int NbPagesRestantes;
 
+        public Imprimante(string nom, float pagesParMinute)
+        {
+            Nom = nom;
+            PagesParMinute = pagesParMinute;
+            DocumentsEnAttente = new List<Document>();
+            DocumentsEnErreur = new List<Document>();
+        }
+
+        public int Work()
+        {
+            while (true)
+            {
+                if (PeutImprimer())
+                {
+                    Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
+                    Document documentImprimé = Imprimer();
+                    Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, documentImprimé.Nom);
+                }
+                Thread.Sleep(3000);
+            }
+            return -1;
+        }
+
         public Document Imprimer()
         {
             Document documentEnCours = DocumentsEnAttente.First();
@@ -81,7 +104,7 @@ namespace ServeurImpression
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
-        private float getTempsPrévuPourDoc(Document doc)
+        public float getTempsPrévuPourDoc(Document doc)
         {
             return (doc.GetNbPages() * PagesParMinute) / 60;
         }
