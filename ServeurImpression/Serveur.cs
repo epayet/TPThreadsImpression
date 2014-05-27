@@ -11,9 +11,14 @@ namespace ServeurImpression
     {
         public List<Imprimante> Imprimantes;
 
+        public Serveur() 
+        {
+            Imprimantes = new List<Imprimante>();
+        }
+
         public void AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            string nomImprimante = ImprimanteQuiPrendLeMoinsDeTemps(doc).Nom;
+            string nomImprimante = imprimanteQuiPrendLeMoinsDeTemps(doc).Nom;
             Imprimante imp = RechercherImprimanteParLeNom(nomImprimante);
             imp.AjouterDocumentAImprimer(doc);
         }
@@ -30,22 +35,6 @@ namespace ServeurImpression
             }
         }
 
-        public Imprimante ImprimanteQuiPrendLeMoinsDeTemps(Document doc) 
-        {
-            Imprimante Imp = null;
-            float tmpMin = 1000000;
-            foreach (Imprimante impremante in Imprimantes)
-            {
-                float tempImprimante = impremante.TempsPrévu(doc);
-                if (tempImprimante < tmpMin)
-                {
-                    tmpMin = tempImprimante;
-                    Imp = impremante;
-                }
-            }
-            return Imp;
-        }
-
         public Imprimante RechercherImprimanteParLeNom(string nom)
         {
             foreach (Imprimante imprimante in Imprimantes)
@@ -56,6 +45,32 @@ namespace ServeurImpression
                 }
             }
             return null;
+        }
+
+        public void AjouterImprimante(Imprimante imprimante)
+        {
+            Imprimantes.Add(imprimante);
+            ImprimanteRunner imprimanteRunner = new ImprimanteRunner
+            {
+                Imprimante = imprimante
+            };
+            Task taskImprimante = new Task(imprimanteRunner.Run);
+        }
+
+        private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
+        {
+            Imprimante Imp = null;
+            float tmpMin = Imprimantes.First().TempsPrévu(doc);
+            foreach (Imprimante impremante in Imprimantes)
+            {
+                float tempImprimante = impremante.TempsPrévu(doc);
+                if (tempImprimante < tmpMin)
+                {
+                    tmpMin = tempImprimante;
+                    Imp = impremante;
+                }
+            }
+            return Imp;
         }
 
     }
