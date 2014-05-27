@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace ServeurImpression
 {
@@ -11,7 +12,12 @@ namespace ServeurImpression
 
         public void Run()
         {
-            throw new NotImplementedException();
+            while (true)
+            {
+                if(Imprimante.PeutImprimer())
+                    Imprimante.Imprimer();
+                Thread.Sleep(3000);
+            }
         }
     }
 }

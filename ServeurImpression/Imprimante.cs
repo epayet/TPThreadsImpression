@@ -11,10 +11,10 @@ namespace ServeurImpression
     {
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
-        public Etat Etat { get; set; }
-        public List<Document> DocumentsEnAttente { get; set; }
-        public List<Document> DocumentsEnErreur { get; set; }
-        public int NbPagesRestantes { get; set; }
+        public Etat Etat { get; private set; }
+        private List<Document> DocumentsEnAttente;
+        private List<Document> DocumentsEnErreur;
+        private int NbPagesRestantes;
 
         public void Imprimer()
         {
@@ -74,6 +74,11 @@ namespace ServeurImpression
                     break;
                 }
             }
+        }
+
+        public bool PeutImprimer()
+        {
+            return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
         private float getTempsPrévuPourDoc(Document doc)
