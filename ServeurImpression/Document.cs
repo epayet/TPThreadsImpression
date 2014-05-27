@@ -14,7 +14,7 @@ namespace ServeurImpression
             document = source;
         }
 
-        public int nbrPages()
+        public int GetNbPages()
         {
             return document.Length / 100000;
         }

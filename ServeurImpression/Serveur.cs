@@ -19,10 +19,10 @@ namespace ServeurImpression
         public Imprimante ImprimanteQuiPrendLeMoinsDeTemps(Document doc) 
         {
             Imprimante Imp = null;
-            int tmpMin = 1000000;
+            float tmpMin = 1000000;
             foreach (Imprimante impremante in Imprimantes)
             {
-                int tempImprimante = impremante.TempsPrévu(doc);
+                float tempImprimante = impremante.TempsPrévu(doc);
                 if (tempImprimante < tmpMin)
                 {
                     tmpMin = tempImprimante;
