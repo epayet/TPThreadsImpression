@@ -62,5 +62,15 @@ namespace ServeurImpression
         {
             return (NbPagesRestantes * PagesParMinute) / 60;
         }
+
+        public Document GetDocumentParId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SupprimerDocument(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

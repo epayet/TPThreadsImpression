@@ -8,15 +8,13 @@ namespace ServeurImpression
 {
     public class Document
     {
-        public byte[] document;
-        public Document( byte[] source)
-        {
-            document = source;
-        }
+        public int Id { get; set; }
+        public string Nom {get; set;}
+        public byte[] Contenu { get; set;}
 
         public int GetNbPages()
         {
-            return document.Length / 100000;
+            return Contenu.Length / 100000;
         }
     
     }
