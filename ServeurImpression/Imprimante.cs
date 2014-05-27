@@ -12,13 +12,14 @@ namespace ServeurImpression
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
         public Etat Etat { get; set; }
-        public Queue<Document> DocumentsEnAttente { get; set; }
+        public List<Document> DocumentsEnAttente { get; set; }
         public List<Document> DocumentsEnErreur { get; set; }
         public int NbPagesRestantes { get; set; }
 
         public void Imprimer()
         {
-            Document documentEnCours = DocumentsEnAttente.Dequeue();
+            Document documentEnCours = DocumentsEnAttente.First();
+            DocumentsEnAttente.RemoveAt(0);
 
             NbPagesRestantes = documentEnCours.GetNbPages();
             float tempsDImpression = getTempsPrévuPourDoc(documentEnCours);
@@ -50,7 +51,29 @@ namespace ServeurImpression
 
         public void AjouterDocumentAImprimer(Document doc)
         {
-            DocumentsEnAttente.Enqueue(doc);
+            DocumentsEnAttente.Add(doc);
+        }
+
+        public Document GetDocumentParId(int id)
+        {
+            foreach (Document doc in DocumentsEnAttente)
+            {
+                if (doc.Id == id)
+                    return doc;
+            }
+            return null;
+        }
+
+        public void SupprimerDocument(int id)
+        {
+            for (int i = 0; i < DocumentsEnAttente.Count; i++)
+            {
+                if (DocumentsEnAttente.ElementAt(i).Id == id)
+                {
+                    DocumentsEnAttente.RemoveAt(i);
+                    break;
+                }
+            }
         }
 
         private float getTempsPrévuPourDoc(Document doc)
@@ -61,16 +84,6 @@ namespace ServeurImpression
         private float getTempsRestantDocEnCours()
         {
             return (NbPagesRestantes * PagesParMinute) / 60;
-        }
-
-        public Document GetDocumentParId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SupprimerDocument(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

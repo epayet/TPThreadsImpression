@@ -8,9 +8,18 @@ namespace ServeurImpression
 {
     public class Document
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public string Nom {get; set;}
         public byte[] Contenu { get; set;}
+        private static int TotalNbDocs = 0;
+
+        public Document(string nom, byte[] contenu)
+        {
+            TotalNbDocs++;
+            Id = TotalNbDocs;
+            Nom = nom;
+            Contenu = contenu;
+        }
 
         public int GetNbPages()
         {
