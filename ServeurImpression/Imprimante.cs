@@ -12,11 +12,11 @@ namespace ServeurImpression
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
         public Etat Etat { get; private set; }
-        private List<Document> DocumentsEnAttente;
-        private List<Document> DocumentsEnErreur;
+        public List<Document> DocumentsEnAttente {get; private set;}
+        public List<Document> DocumentsEnErreur { get; private set; }
         private int NbPagesRestantes;
 
-        public void Imprimer()
+        public Document Imprimer()
         {
             Document documentEnCours = DocumentsEnAttente.First();
             DocumentsEnAttente.RemoveAt(0);
@@ -30,7 +30,7 @@ namespace ServeurImpression
                 NbPagesRestantes--;
             }
 
-            documentEnCours = null;
+            return documentEnCours;
         }
 
         public float TempsPrévu(Document doc)

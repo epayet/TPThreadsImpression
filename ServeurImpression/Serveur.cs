@@ -27,7 +27,7 @@ namespace ServeurImpression
         {
             foreach (Imprimante imp in Imprimantes)
             {
-                if(imp.GetDocumentParId(doc.Id) != null )
+                if(imp.GetDocumentParId(doc.Id) != null)
                 {
                     imp.SupprimerDocument(doc.Id);
                     break;
@@ -59,7 +59,7 @@ namespace ServeurImpression
 
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            Imprimante Imp = null;
+            Imprimante Imp = Imprimantes.First();
             float tmpMin = Imprimantes.First().TempsPrévu(doc);
             foreach (Imprimante impremante in Imprimantes)
             {

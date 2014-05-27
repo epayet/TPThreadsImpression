@@ -14,8 +14,12 @@ namespace ServeurImpression
         {
             while (true)
             {
-                if(Imprimante.PeutImprimer())
-                    Imprimante.Imprimer();
+                if (Imprimante.PeutImprimer())
+                {
+                    Console.WriteLine("Imprimante %s commence à imprimer", Imprimante.Nom);
+                    Document documentImprimé = Imprimante.Imprimer();
+                    Console.WriteLine("Imprimante %s a imprimé le document %s", Imprimante.Nom, documentImprimé.Nom);
+                }
                 Thread.Sleep(3000);
             }
         }
