@@ -9,12 +9,40 @@ namespace ServeurImpression
 {
     class Serveur
     {
-        public const string PATH = "c:\tpImpression";
+        public List<Imprimante> Imprimantes;
 
-        string ajouter(byte[] source)
+        public void AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            Document doc = new Document(source);
-            return "";
+            Imprimante imp = RechercherImprimanteParLeNom(ImprimanteQuiPrendLeMoinsDeTemps(doc).Nom);
         }
+
+        public Imprimante ImprimanteQuiPrendLeMoinsDeTemps(Document doc) 
+        {
+            Imprimante Imp = null;
+            int tmpMin = 1000000;
+            foreach (Imprimante impremante in Imprimantes)
+            {
+                int tempImprimante = impremante.TempsPrévu(doc);
+                if (tempImprimante < tmpMin)
+                {
+                    tmpMin = tempImprimante;
+                    Imp = impremante;
+                }
+            }
+            return Imp;
+        }
+
+        public Imprimante RechercherImprimanteParLeNom(string nom)
+        {
+            foreach (Imprimante imprimante in Imprimantes)
+            {
+                if (imprimante.Nom == nom)
+                {
+                    return imprimante;
+                }
+            }
+            return null;
+        }
+
     }
 }
