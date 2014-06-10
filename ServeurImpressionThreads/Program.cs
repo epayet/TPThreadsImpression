@@ -17,7 +17,7 @@ namespace ServeurImpressionThreads
             Application.Run(new FormClient());
 
             //Lancer serveurs
-            ServeurInterface serveur = new ServeurInterface();
+            SimpleServeur serveur = new SimpleServeur();
             /*
              * Serveur serv = new Serveur();
             Imprimante Imp = new Imprimante("imp1", 2);

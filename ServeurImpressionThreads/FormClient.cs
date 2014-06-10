@@ -15,12 +15,12 @@ namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
-        private ServeurInterface monServeur;
+        private SimpleServeur monServeur;
 
         public FormClient()
         {
             InitializeComponent();
-            monServeur = new ServeurInterface();
+            monServeur = new SimpleServeur();
         }
 
         public byte[] ConvertirDocumentEnBytes(String CheminFichier)

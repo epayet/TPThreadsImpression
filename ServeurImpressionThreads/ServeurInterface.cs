@@ -7,25 +7,18 @@ using System.Threading.Tasks;
 
 namespace ServeurImpressionThreads
 {
-    public class ServeurInterface
+    public class SimpleServeur : ServeurCommunication
     {
-        Serveur monServeur;
+        private Serveur monServeur;
 
-        public ServeurInterface()
+        public SimpleServeur()
         {
             monServeur = new Serveur();
         }
 
         public void AjouterDocument(Document monDoc)
         {
-            try
-            {
-                monServeur.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(monDoc);
-            }
-            catch (NullReferenceException)
-            {
-                Console.Write("baaah");
-            }
+            monServeur.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(monDoc);
         }
 
         public void SupprimerDocument(Document monDoc)

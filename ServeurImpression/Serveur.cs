@@ -19,8 +19,7 @@ namespace ServeurImpression
 
         public void AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            string nomImprimante = imprimanteQuiPrendLeMoinsDeTemps(doc).Nom;
-            Imprimante imp = RechercherImprimanteParLeNom(nomImprimante);
+            Imprimante imp = imprimanteQuiPrendLeMoinsDeTemps(doc);
             imp.AjouterDocumentAImprimer(doc);
         }
 
