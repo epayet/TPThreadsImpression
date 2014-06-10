@@ -53,7 +53,7 @@ namespace ServeurImpression
             while (NbPagesRestantes != 0)
             {
                 Thread.Sleep((int)(tempsDImpressionPourUnePage * 1000));
-                Console.WriteLine("Page {0} imprimée", nbPagesImprimees);
+                Console.WriteLine("{0}: Page {1} imprimée", Nom, nbPagesImprimees);
                 NbPagesRestantes--;
                 nbPagesImprimees++;
             }
@@ -77,7 +77,7 @@ namespace ServeurImpression
             return temps;
         }
 
-        public void AjouterDocumentAImprimer(Document doc)
+        public void AjouterDocument(Document doc)
         {
             DocumentsEnAttente.Add(doc);
             EvenementImprimer.Set();

@@ -17,13 +17,13 @@ namespace ServeurImpression
             Imprimantes = new List<Imprimante>();
         }
 
-        public void AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(Document doc)
+        public void AjouterDocument(Document doc)
         {
-            Imprimante imp = imprimanteQuiPrendLeMoinsDeTemps(doc);
-            imp.AjouterDocumentAImprimer(doc);
+            Imprimante imprimante = imprimanteQuiPrendLeMoinsDeTemps(doc);
+            imprimante.AjouterDocument(doc);
         }
 
-        public void SupprimerLeDocumentEnAttente(Document doc)
+        public void SupprimerDocument(Document doc)
         {
             foreach (Imprimante imp in Imprimantes)
             {
@@ -35,7 +35,7 @@ namespace ServeurImpression
             }
         }
 
-        public Imprimante RechercherImprimanteParLeNom(string nom)
+        public Imprimante RechercherImprimante(string nom)
         {
             foreach (Imprimante imprimante in Imprimantes)
             {
@@ -45,6 +45,14 @@ namespace ServeurImpression
                 }
             }
             return null;
+        }
+
+        //TODO Faire un thread qui orchestre tous les task au lieu d'un thread par task
+        public void AjouterImprimante(Imprimante imprimante)
+        {
+            Imprimantes.Add(imprimante);
+            Thread thread = new Thread(() => creerTacheImprimante(imprimante));
+            thread.Start();
         }
 
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
@@ -61,14 +69,6 @@ namespace ServeurImpression
                 }
             }
             return Imp;
-        }
-
-        //TODO Faire un thread qui orchestre tous les task au lieu d'un thread par task
-        public void AjouterImprimante(Imprimante imprimante)
-        {
-            Imprimantes.Add(imprimante);
-            Thread thread = new Thread(() => creerTacheImprimante(imprimante));
-            thread.Start();
         }
 
         private void creerTacheImprimante(Imprimante imprimante)

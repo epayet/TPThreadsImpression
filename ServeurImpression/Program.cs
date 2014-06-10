@@ -11,8 +11,10 @@ namespace ServeurImpression
         static void Main(string[] args)
         {
             Serveur serv = new Serveur();
-            Imprimante Imp = new Imprimante("imp1", 0.05f);
-            serv.AjouterImprimante(Imp);
+            Imprimante imp = new Imprimante("imp1", 0.05f);
+            serv.AjouterImprimante(imp);
+            Imprimante imp2 = new Imprimante("imp2", 0.01f);
+            serv.AjouterImprimante(imp2);
 
             int nbData = 1000000;
             byte[] fakeData = new byte[nbData];
@@ -20,10 +22,12 @@ namespace ServeurImpression
             {
                 fakeData[i] = 1;
             }
-            Document doc = new Document("doc1", fakeData);
-            serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc);
-            Document doc2 = new Document("doc2", fakeData);
-            serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc2);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Document doc = new Document("doc" + i, fakeData);
+                serv.AjouterDocument(doc);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ServeurImpressionThreads
 
         public void AjouterDocument(Document monDoc)
         {
-            monServeur.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(monDoc);
+            monServeur.AjouterDocument(monDoc);
         }
 
         public void SupprimerDocument(Document monDoc)
