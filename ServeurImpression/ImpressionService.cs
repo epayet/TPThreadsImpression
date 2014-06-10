@@ -8,28 +8,33 @@ using System.Threading;
 
 namespace ServeurImpression
 {
-    public class Serveur
+    public class ImpressionService
     {
         public List<Imprimante> Imprimantes;
 
-        public Serveur() 
+        public ImpressionService() 
         {
             Imprimantes = new List<Imprimante>();
         }
 
-        public void AjouterDocument(Document doc)
+        public Imprimante AjouterDocument(Document doc)
         {
             Imprimante imprimante = imprimanteQuiPrendLeMoinsDeTemps(doc);
             imprimante.AjouterDocument(doc);
+            return imprimante;
         }
 
         public void SupprimerDocument(Document doc)
         {
-            foreach (Imprimante imp in Imprimantes)
+            foreach (Imprimante imprimante in Imprimantes)
             {
-                if(imp.GetDocumentParId(doc.Id) != null)
+                if (imprimante.EstEnCoursDImpression(doc.Id))
                 {
-                    imp.SupprimerDocument(doc.Id);
+                    imprimante.AnnulerImpression();
+                } 
+                else if(imprimante.GetDocumentParId(doc.Id) != null)
+                {
+                    imprimante.SupprimerDocument(doc.Id);
                     break;
                 }
             }

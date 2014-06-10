@@ -9,11 +9,11 @@ namespace ServeurImpressionThreads
 {
     public class SimpleServeur : ServeurCommunication
     {
-        private Serveur monServeur;
+        private ImpressionService monServeur;
 
         public SimpleServeur()
         {
-            monServeur = new Serveur();
+            monServeur = new ImpressionService();
         }
 
         public void AjouterDocument(Document monDoc)

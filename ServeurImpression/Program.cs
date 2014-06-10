@@ -10,7 +10,7 @@ namespace ServeurImpression
     {
         static void Main(string[] args)
         {
-            Serveur serv = new Serveur();
+            ImpressionService serv = new ImpressionService();
             Imprimante imp = new Imprimante("imp1", 0.05f);
             serv.AjouterImprimante(imp);
             Imprimante imp2 = new Imprimante("imp2", 0.01f);
