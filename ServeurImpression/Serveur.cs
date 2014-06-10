@@ -64,17 +64,17 @@ namespace ServeurImpression
             return Imp;
         }
 
-        //Ici un thread qui attend un task, faire un thread qui gère les task
+        //TODO Faire un thread qui orchestre tous les task au lieu d'un thread par task
         public void AjouterImprimante(Imprimante imprimante)
         {
             Imprimantes.Add(imprimante);
-            Thread thread = new Thread(() => createTaskAndWaitForIt(imprimante));
+            Thread thread = new Thread(() => creerTacheImprimante(imprimante));
             thread.Start();
         }
 
-        private void createTaskAndWaitForIt(Imprimante imprimante)
+        private void creerTacheImprimante(Imprimante imprimante)
         {
-            Task<int> taskImprimante = new Task<int>(imprimante.Work);
+            Task<int> taskImprimante = new Task<int>(imprimante.Travailler);
             taskImprimante.Start();
             int waitFor = taskImprimante.Result;
         }

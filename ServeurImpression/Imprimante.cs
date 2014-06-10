@@ -12,9 +12,10 @@ namespace ServeurImpression
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
         public Etat Etat { get; private set; }
-        public List<Document> DocumentsEnAttente {get; private set;}
+        public List<Document> DocumentsEnAttente { get; private set; }
         public List<Document> DocumentsEnErreur { get; private set; }
         private int NbPagesRestantes;
+        public EventWaitHandle EvenementImprimer { get; private set; }
 
         public Imprimante(string nom, float pagesParMinute)
         {
@@ -22,19 +23,20 @@ namespace ServeurImpression
             PagesParMinute = pagesParMinute;
             DocumentsEnAttente = new List<Document>();
             DocumentsEnErreur = new List<Document>();
+            EvenementImprimer = new AutoResetEvent(false);
         }
 
-        public int Work()
+        public int Travailler()
         {
             while (true)
             {
-                if (PeutImprimer())
+                EvenementImprimer.WaitOne();
+                while (PeutImprimer())
                 {
                     Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
                     Document documentImprimé = Imprimer();
                     Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, documentImprimé.Nom);
                 }
-                Thread.Sleep(3000);
             }
             return -1;
         }
@@ -47,10 +49,13 @@ namespace ServeurImpression
             NbPagesRestantes = documentEnCours.GetNbPages();
             float tempsDImpression = getTempsPrévuPourDoc(documentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
+            int nbPagesImprimees = 1;
             while (NbPagesRestantes != 0)
             {
-                Thread.Sleep((int)(tempsDImpressionPourUnePage / 1000));
+                Thread.Sleep((int)(tempsDImpressionPourUnePage * 1000));
+                Console.WriteLine("Page {0} imprimée", nbPagesImprimees);
                 NbPagesRestantes--;
+                nbPagesImprimees++;
             }
 
             return documentEnCours;
@@ -75,6 +80,7 @@ namespace ServeurImpression
         public void AjouterDocumentAImprimer(Document doc)
         {
             DocumentsEnAttente.Add(doc);
+            EvenementImprimer.Set();
         }
 
         public Document GetDocumentParId(int id)
@@ -106,12 +112,17 @@ namespace ServeurImpression
 
         public float getTempsPrévuPourDoc(Document doc)
         {
-            return (doc.GetNbPages() * PagesParMinute) / 60;
+            return (doc.GetNbPages() * PagesParMinute) * 60;
         }
 
         private float getTempsRestantDocEnCours()
         {
-            return (NbPagesRestantes * PagesParMinute) / 60;
+            return (NbPagesRestantes * PagesParMinute) * 60;
+        }
+
+        private bool estLibre()
+        {
+            return NbPagesRestantes == 0 && DocumentsEnAttente.Count == 0;
         }
     }
 }
