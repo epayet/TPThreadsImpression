@@ -15,7 +15,7 @@ namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
-        private SimpleServeur monServeur;
+        private ServeurCommunication monServeur;
 
         public FormClient()
         {
@@ -23,9 +23,9 @@ namespace ServeurImpressionThreads
             monServeur = new SimpleServeur();
         }
 
-        public byte[] ConvertirDocumentEnBytes(String CheminFichier)
+        public byte[] ConvertirDocumentEnBytes(String cheminFichier)
         {
-            byte[] contenu = File.ReadAllBytes(CheminFichier);
+            byte[] contenu = File.ReadAllBytes(cheminFichier);
             return contenu;
         }
 
