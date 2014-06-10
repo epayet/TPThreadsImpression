@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace ServeurImpression
 {
-    class Serveur
+    public class Serveur
     {
         public List<Imprimante> Imprimantes;
 

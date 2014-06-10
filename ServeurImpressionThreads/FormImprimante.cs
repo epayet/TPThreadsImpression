@@ -14,7 +14,7 @@ namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
-        Imprimante monImprimante;
+        private Imprimante monImprimante;
 
         public FormImprimante(Imprimante uneImprimante)
         {
@@ -83,20 +83,10 @@ namespace ServeurImpressionThreads
                 MessageBox.Show("Opération annulée");
         }
 
-        private void backgroundWorkerImprimante_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled == false)
-            {
-                MessageBox.Show("Opération terminée avec succès !");
-            }
-            else
-                MessageBox.Show("Opération annulée");
-        }
-
         private void boutonAnulerImpression_Click(object sender, EventArgs e)
         {
             listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.SelectedItem);
-            monImprimante.AnnulerImpression(listBoxImpressionsImprimante.SelectedItem);
+            //monImprimante.AnnulerImpression(listBoxImpressionsImprimante.SelectedItem);
         }
 
     }

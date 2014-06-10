@@ -15,12 +15,12 @@ namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
-        ServeurInterface monServeur;
+        private ServeurInterface monServeur;
 
         public FormClient()
         {
             InitializeComponent();
-            ServeurInterface monServeur = new ServeurInterface();
+            monServeur = new ServeurInterface();
         }
 
         public byte[] ConvertirDocumentEnBytes(String CheminFichier)
@@ -57,10 +57,8 @@ namespace ServeurImpressionThreads
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             listBoxFichierAImprimer.Items.Remove(listBoxFichierAImprimer.SelectedItem);
-            monServeur.SupprimerDocument(listBoxFichierAImprimer.SelectedItem.ToString());
+            //monServeur.SupprimerDocument(listBoxFichierAImprimer.SelectedItem.ToString());
         }
-
-        
 
     }
 }

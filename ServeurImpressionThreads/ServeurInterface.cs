@@ -9,14 +9,28 @@ namespace ServeurImpressionThreads
 {
     public class ServeurInterface
     {
-        public void AjouterDocument(Document monDoc)
+        Serveur monServeur;
+
+        public ServeurInterface()
         {
-            //call ServeurImpression.ajouterDoc
+            monServeur = new Serveur();
         }
 
-        public void SupprimerDocument(String cheminFichier)
+        public void AjouterDocument(Document monDoc)
         {
-            //call ServeurImpression.supprimerDoc
+            try
+            {
+                monServeur.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(monDoc);
+            }
+            catch (NullReferenceException)
+            {
+                Console.Write("baaah");
+            }
+        }
+
+        public void SupprimerDocument(Document monDoc)
+        {
+            //monServeur.AnnulerImpression(monDoc);
         }
     }
 }
