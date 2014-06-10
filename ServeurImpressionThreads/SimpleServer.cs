@@ -9,7 +9,8 @@ namespace ServeurImpressionThreads
 {
     public class SimpleServeur : ServeurCommunication
     {
-        private Serveur monServeur;
+        //En public juste pour les tests
+        public Serveur monServeur;
 
         public SimpleServeur()
         {
@@ -24,6 +25,11 @@ namespace ServeurImpressionThreads
         public void SupprimerDocument(Document monDoc)
         {
             //monServeur.AnnulerImpression(monDoc);
+        }
+
+        public List<Imprimante> GetImprimantes()
+        {
+            return monServeur.Imprimantes;
         }
     }
 }

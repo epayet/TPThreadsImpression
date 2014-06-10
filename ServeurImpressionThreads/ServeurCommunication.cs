@@ -11,5 +11,6 @@ namespace ServeurImpressionThreads
     {
         void AjouterDocument(Document doc);
         void SupprimerDocument(Document monDoc);
+        List<Imprimante> GetImprimantes();
     }
 }
