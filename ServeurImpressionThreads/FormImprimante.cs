@@ -7,32 +7,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ServeurImpression;
 
 namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
-        String nomImprimante = "";
-        int vitesse = 0;
+        Imprimante monImprimante;
 
-        public FormImprimante()
+        public FormImprimante(Imprimante uneImprimante)
         {
             InitializeComponent();
+            monImprimante = uneImprimante;
         }
 
-        public FormImprimante(String p_nomImprimante, int p_vitesse)
+        private void FormImprimante_Load(object sender, EventArgs e)
         {
-            InitializeComponent();
-            this.vitesse = p_vitesse;
-            this.nomImprimante = p_nomImprimante;
-            this.Text = "Imprimante " + this.nomImprimante;
+            backgroundWorkerImprimante.RunWorkerAsync();
         }
 
-        void MAJProgressBar(int nbPages)
+        private void backgroundWorkerImprimante_DoWork(object sender, DoWorkEventArgs e)
+        {
+            MAJProgressBar();
+        }
+
+        private void backgroundWorkerImprimante_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBarImpression.Value = e.ProgressPercentage;
+        }
+
+        void MAJListeDocuments()
+        {
+            for (int i = 0; i < monImprimante.DocumentsEnAttente.Count; i++)
+            {
+                listBoxImpressionsImprimante.Items.Add(monImprimante.DocumentsEnAttente[i].ToString());
+            }
+        }
+
+        void MAJProgressBar()
         {
             if (backgroundWorkerImprimante.CancellationPending == false)
             {
-                for (int i = 0; i < nbPages; i++)
+                //Met à jour la progressbar suivant le fichier en cours d'impression
+                for (int i = 0; i < monImprimante.TempsPrévu(monImprimante.DocumentsEnAttente[0]); i++)
                 {
                     double pourcentage = 0;
                     pourcentage = i / vitesse * 100;
@@ -40,5 +57,24 @@ namespace ServeurImpressionThreads
                 }
             }
         }
+
+        private void backgroundWorkerImprimante_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //Quand doc imprimé, enlève doc de la liste
+            if (e.Cancelled == false)
+            {
+                if (listBoxImpressionsImprimante.Items.Count != 0)
+                {
+                    listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.Items[0]);
+                }
+                else
+                {
+
+                }
+            }
+            else
+                MessageBox.Show("Opération annulée");
+        }
+
     }
 }

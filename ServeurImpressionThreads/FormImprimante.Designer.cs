@@ -62,6 +62,11 @@
             this.labelProgressBar.TabIndex = 2;
             this.labelProgressBar.Text = "Fichier en cours :";
             // 
+            // backgroundWorkerImprimante
+            // 
+            this.backgroundWorkerImprimante.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerImprimante_DoWork);
+            this.backgroundWorkerImprimante.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerImprimante_ProgressChanged);
+            // 
             // FormImprimante
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);

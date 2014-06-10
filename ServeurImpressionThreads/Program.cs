@@ -16,10 +16,10 @@ namespace ServeurImpressionThreads
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new FormClient());
 
             //Lancer serveur
-            Serveur serveur = new Serveur();
+            ServeurInterface serveur = new ServeurInterface();
         }
     }
 }

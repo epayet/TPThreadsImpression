@@ -33,7 +33,6 @@
             this.buttonAjouterFichier = new System.Windows.Forms.Button();
             this.listBoxEnCours = new System.Windows.Forms.ListBox();
             this.buttonSupprimer = new System.Windows.Forms.Button();
-            this.buttonInfos = new System.Windows.Forms.Button();
             this.labelListeImpressionEnCours = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -85,16 +84,6 @@
             this.buttonSupprimer.UseVisualStyleBackColor = true;
             this.buttonSupprimer.Click += new System.EventHandler(this.buttonSupprimer_Click);
             // 
-            // buttonInfos
-            // 
-            this.buttonInfos.Location = new System.Drawing.Point(422, 165);
-            this.buttonInfos.Name = "buttonInfos";
-            this.buttonInfos.Size = new System.Drawing.Size(94, 34);
-            this.buttonInfos.TabIndex = 5;
-            this.buttonInfos.Text = "Infos";
-            this.buttonInfos.UseVisualStyleBackColor = true;
-            this.buttonInfos.Click += new System.EventHandler(this.buttonInfos_Click);
-            // 
             // labelListeImpressionEnCours
             // 
             this.labelListeImpressionEnCours.AutoSize = true;
@@ -111,7 +100,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 418);
             this.Controls.Add(this.labelListeImpressionEnCours);
-            this.Controls.Add(this.buttonInfos);
             this.Controls.Add(this.buttonSupprimer);
             this.Controls.Add(this.listBoxEnCours);
             this.Controls.Add(this.buttonAjouterFichier);
@@ -131,7 +119,6 @@
         private System.Windows.Forms.Button buttonAjouterFichier;
         private System.Windows.Forms.ListBox listBoxEnCours;
         private System.Windows.Forms.Button buttonSupprimer;
-        private System.Windows.Forms.Button buttonInfos;
         private System.Windows.Forms.Label labelListeImpressionEnCours;
     }
 }
