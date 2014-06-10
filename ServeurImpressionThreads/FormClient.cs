@@ -17,10 +17,11 @@ namespace ServeurImpressionThreads
     {
         private ServeurCommunication monServeur;
 
-        public FormClient()
+        public FormClient(ServeurCommunication monServCom)
         {
             InitializeComponent();
-            monServeur = new SimpleServeur();
+            monServeur = monServCom;
+            
         }
 
         public byte[] ConvertirDocumentEnBytes(String cheminFichier)
