@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ServeurImpression
+namespace ServiceImpression.Data
 {
     public class Imprimante
     {
@@ -27,7 +27,7 @@ namespace ServeurImpression
             EvenementImprimer = new AutoResetEvent(false);
         }
 
-        public int Travailler()
+        public void Travailler()
         {
             while (true)
             {
@@ -37,7 +37,6 @@ namespace ServeurImpression
                     Imprimer();
                 }
             }
-            return -1;
         }
 
         public void Imprimer()
@@ -47,7 +46,7 @@ namespace ServeurImpression
             DocumentsEnAttente.RemoveAt(0);
 
             NbPagesRestantes = DocumentEnCours.GetNbPages();
-            float tempsDImpression = getTempsPrévuPourDoc(DocumentEnCours);
+            float tempsDImpression = GetTempsPrévuPourDoc(DocumentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
             int nbPagesImprimees = 1;
             while (NbPagesRestantes != 0 && DocumentEnCours != null)
@@ -73,7 +72,7 @@ namespace ServeurImpression
             List<Document> documentsEnAttente = new List<Document>(DocumentsEnAttente);
             foreach(Document docEnAttente in documentsEnAttente) 
             {
-                temps += getTempsPrévuPourDoc(docEnAttente);
+                temps += GetTempsPrévuPourDoc(docEnAttente);
             }
             return temps;
         }
@@ -81,6 +80,7 @@ namespace ServeurImpression
         public void AjouterDocument(Document doc)
         {
             DocumentsEnAttente.Add(doc);
+            //Déclenche l'évènement d'impression
             EvenementImprimer.Set();
         }
 
@@ -94,7 +94,7 @@ namespace ServeurImpression
             return null;
         }
 
-        public void SupprimerDocument(int id)
+        public void SupprimerDocumentEnAttente(int id)
         {
             for (int i = 0; i < DocumentsEnAttente.Count; i++)
             {
@@ -111,7 +111,7 @@ namespace ServeurImpression
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
-        public float getTempsPrévuPourDoc(Document doc)
+        public float GetTempsPrévuPourDoc(Document doc)
         {
             return (doc.GetNbPages() * PagesParMinute) * 60;
         }

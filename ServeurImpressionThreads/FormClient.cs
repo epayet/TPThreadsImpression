@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ServeurImpressionThreads;
 using System.IO;
 using ServeurImpression;
+using ServiceImpression.Data;
 
 namespace ServeurImpressionThreads
 {
