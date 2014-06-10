@@ -7,38 +7,87 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ServeurImpression;
+using System.Threading;
 
 namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
-        String nomImprimante = "";
-        int vitesse = 0;
+        private Imprimante monImprimante;
 
-        public FormImprimante()
+        public FormImprimante(Imprimante uneImprimante)
         {
             InitializeComponent();
+            monImprimante = uneImprimante;
+            this.Text = uneImprimante.Nom;
         }
 
-        public FormImprimante(String p_nomImprimante, int p_vitesse)
+        private void FormImprimante_Load(object sender, EventArgs e)
         {
-            InitializeComponent();
-            this.vitesse = p_vitesse;
-            this.nomImprimante = p_nomImprimante;
-            this.Text = "Imprimante " + this.nomImprimante;
+            listBoxImpressionsImprimante.Items.Clear();
+            backgroundWorkerImprimante.RunWorkerAsync();
         }
 
-        void MAJProgressBar(int nbPages)
+        private void backgroundWorkerImprimante_DoWork(object sender, DoWorkEventArgs e)
+        {
+            MAJProgressBar(e);
+        }
+
+        private void backgroundWorkerImprimante_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBarImpression.Value = e.ProgressPercentage;
+        }
+
+        void MAJListeDocuments()
+        {
+            listBoxImpressionsImprimante.Items.Clear();
+            for (int i = 0; i < monImprimante.DocumentsEnAttente.Count; i++)
+            {
+                listBoxImpressionsImprimante.Items.Add(monImprimante.DocumentsEnAttente[i].ToString());
+            }
+        }
+
+        void MAJProgressBar(DoWorkEventArgs e)
         {
             if (backgroundWorkerImprimante.CancellationPending == false)
             {
-                for (int i = 0; i < nbPages; i++)
+                //Met à jour la progressbar suivant le fichier en cours d'impression
+                int nombrePagesTotalDocument = (int)monImprimante.DocumentsEnAttente[0].GetNbPages();
+                for (int i = 0; i < nombrePagesTotalDocument; i++)
                 {
                     double pourcentage = 0;
-                    pourcentage = i / vitesse * 100;
+                    pourcentage = monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / i * 100;
                     backgroundWorkerImprimante.ReportProgress((int)pourcentage);
+                    //Sleep (pendant le temps d'imrpession d'une page)
+                    Thread.Sleep((int)monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / nombrePagesTotalDocument * 1000);
                 }
             }
+            else
+            {
+                e.Cancel = true;
+            }
         }
+
+        private void backgroundWorkerImprimante_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //Quand doc imprimé, enlève doc de la liste
+            if (e.Cancelled == false)
+            {
+                if (listBoxImpressionsImprimante.Items.Count != 0)
+                {
+                    listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.Items[0]);
+                }
+            }
+            else
+                MessageBox.Show("Opération annulée");
+        }
+
+        private void boutonAnulerImpression_Click(object sender, EventArgs e)
+        {
+            listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.SelectedItem);
+            //monImprimante.AnnulerImpression(listBoxImpressionsImprimante.SelectedItem);
+        }
+
     }
 }
