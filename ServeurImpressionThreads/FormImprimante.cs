@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ServeurImpression;
+using System.Threading;
 
 namespace ServeurImpressionThreads
 {
@@ -19,16 +20,18 @@ namespace ServeurImpressionThreads
         {
             InitializeComponent();
             monImprimante = uneImprimante;
+            this.Text = uneImprimante.Nom;
         }
 
         private void FormImprimante_Load(object sender, EventArgs e)
         {
+            listBoxImpressionsImprimante.Items.Clear();
             backgroundWorkerImprimante.RunWorkerAsync();
         }
 
         private void backgroundWorkerImprimante_DoWork(object sender, DoWorkEventArgs e)
         {
-            MAJProgressBar();
+            MAJProgressBar(e);
         }
 
         private void backgroundWorkerImprimante_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -38,23 +41,31 @@ namespace ServeurImpressionThreads
 
         void MAJListeDocuments()
         {
+            listBoxImpressionsImprimante.Items.Clear();
             for (int i = 0; i < monImprimante.DocumentsEnAttente.Count; i++)
             {
                 listBoxImpressionsImprimante.Items.Add(monImprimante.DocumentsEnAttente[i].ToString());
             }
         }
 
-        void MAJProgressBar()
+        void MAJProgressBar(DoWorkEventArgs e)
         {
             if (backgroundWorkerImprimante.CancellationPending == false)
             {
                 //Met à jour la progressbar suivant le fichier en cours d'impression
-                for (int i = 0; i < monImprimante.TempsPrévu(monImprimante.DocumentsEnAttente[0]); i++)
+                int nombrePagesTotalDocument = (int)monImprimante.DocumentsEnAttente[0].GetNbPages();
+                for (int i = 0; i < nombrePagesTotalDocument; i++)
                 {
                     double pourcentage = 0;
-                    pourcentage = i / vitesse * 100;
+                    pourcentage = monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / i * 100;
                     backgroundWorkerImprimante.ReportProgress((int)pourcentage);
+                    //Sleep (pendant le temps d'imrpession d'une page)
+                    Thread.Sleep((int)monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / nombrePagesTotalDocument * 1000);
                 }
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
 
@@ -67,13 +78,25 @@ namespace ServeurImpressionThreads
                 {
                     listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.Items[0]);
                 }
-                else
-                {
-
-                }
             }
             else
                 MessageBox.Show("Opération annulée");
+        }
+
+        private void backgroundWorkerImprimante_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == false)
+            {
+                MessageBox.Show("Opération terminée avec succès !");
+            }
+            else
+                MessageBox.Show("Opération annulée");
+        }
+
+        private void boutonAnulerImpression_Click(object sender, EventArgs e)
+        {
+            listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.SelectedItem);
+            monImprimante.AnnulerImpression(listBoxImpressionsImprimante.SelectedItem);
         }
 
     }
