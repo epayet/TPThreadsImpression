@@ -77,7 +77,7 @@ namespace ServeurImpression
             return temps;
         }
 
-        public void AjouterDocumentAImprimer(Document doc)
+        public void AjouterDocument(Document doc)
         {
             DocumentsEnAttente.Add(doc);
             EvenementImprimer.Set();

@@ -26,7 +26,7 @@ namespace ServeurImpression
             for (int i = 0; i < 5; i++)
             {
                 Document doc = new Document("doc" + i, fakeData);
-                serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc);
+                serv.AjouterDocument(doc);
             }
         }
     }
