@@ -5,16 +5,35 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ServeurImpression
+namespace ServiceImpression.Data
 {
     public class Imprimante
     {
+        private int nbPagesRestantes;
+        private readonly Object verrouPagesRestantes = new object();
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
         public Etat Etat { get; private set; }
         public List<Document> DocumentsEnAttente { get; private set; }
         public List<Document> DocumentsEnErreur { get; private set; }
-        private int NbPagesRestantes;
+        public int NbPagesRestantes { 
+            get 
+            {
+                int copy;
+                lock (verrouPagesRestantes)
+                {
+                    copy = nbPagesRestantes;
+                }
+                return copy;
+            } 
+            set 
+            {
+                lock (verrouPagesRestantes)
+                {
+                    nbPagesRestantes = value;
+                }
+            } 
+        }
         public EventWaitHandle EvenementImprimer { get; private set; }
         public Document DocumentEnCours { get; set; }
 
@@ -27,7 +46,7 @@ namespace ServeurImpression
             EvenementImprimer = new AutoResetEvent(false);
         }
 
-        public int Travailler()
+        public void Travailler()
         {
             while (true)
             {
@@ -37,7 +56,6 @@ namespace ServeurImpression
                     Imprimer();
                 }
             }
-            return -1;
         }
 
         public void Imprimer()
@@ -47,7 +65,7 @@ namespace ServeurImpression
             DocumentsEnAttente.RemoveAt(0);
 
             NbPagesRestantes = DocumentEnCours.GetNbPages();
-            float tempsDImpression = getTempsPrévuPourDoc(DocumentEnCours);
+            float tempsDImpression = GetTempsPrévuPourDoc(DocumentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
             int nbPagesImprimees = 1;
             while (NbPagesRestantes != 0 && DocumentEnCours != null)
@@ -70,10 +88,17 @@ namespace ServeurImpression
         public float TempsTotalPourDocumentsEnAttente()
         {
             float temps = 0;
-            List<Document> documentsEnAttente = new List<Document>(DocumentsEnAttente);
+
+            List<Document> documentsEnAttente = new List<Document>();
+
+            lock (DocumentsEnAttente)
+            {
+                documentsEnAttente = DocumentsEnAttente;
+            }
+
             foreach(Document docEnAttente in documentsEnAttente) 
             {
-                temps += getTempsPrévuPourDoc(docEnAttente);
+                temps += GetTempsPrévuPourDoc(docEnAttente);
             }
             return temps;
         }
@@ -81,6 +106,7 @@ namespace ServeurImpression
         public void AjouterDocument(Document doc)
         {
             DocumentsEnAttente.Add(doc);
+            //Déclenche l'évènement d'impression
             EvenementImprimer.Set();
         }
 
@@ -94,14 +120,17 @@ namespace ServeurImpression
             return null;
         }
 
-        public void SupprimerDocument(int id)
+        public void SupprimerDocumentEnAttente(int id)
         {
             for (int i = 0; i < DocumentsEnAttente.Count; i++)
             {
                 if (DocumentsEnAttente.ElementAt(i).Id == id)
                 {
-                    DocumentsEnAttente.RemoveAt(i);
-                    break;
+                    lock (DocumentsEnAttente)
+                    {
+                        DocumentsEnAttente.RemoveAt(i);
+                        break;
+                    }
                 }
             }
         }
@@ -111,7 +140,7 @@ namespace ServeurImpression
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
-        public float getTempsPrévuPourDoc(Document doc)
+        public float GetTempsPrévuPourDoc(Document doc)
         {
             return (doc.GetNbPages() * PagesParMinute) * 60;
         }

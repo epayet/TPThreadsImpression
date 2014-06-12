@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using ServiceImpression.Data;
 
-namespace ServeurImpression
+namespace ServiceImpression
 {
     public class ImpressionService
     {
-        public List<Imprimante> Imprimantes;
+        public List<Imprimante> Imprimantes { get; private set; }
 
         public ImpressionService() 
         {
             Imprimantes = new List<Imprimante>();
+        }
+
+        public void Lancer()
+        {
+            Thread thread = new Thread(creerTachesImprimantes);
+            thread.Start();
         }
 
         public Imprimante AjouterDocument(Document doc)
@@ -31,10 +38,11 @@ namespace ServeurImpression
                 if (imprimante.EstEnCoursDImpression(doc.Id))
                 {
                     imprimante.AnnulerImpression();
+                    break;
                 } 
                 else if(imprimante.GetDocumentParId(doc.Id) != null)
                 {
-                    imprimante.SupprimerDocument(doc.Id);
+                    imprimante.SupprimerDocumentEnAttente(doc.Id);
                     break;
                 }
             }
@@ -52,35 +60,53 @@ namespace ServeurImpression
             return null;
         }
 
-        //TODO Faire un thread qui orchestre tous les task au lieu d'un thread par task
         public void AjouterImprimante(Imprimante imprimante)
         {
-            Imprimantes.Add(imprimante);
-            Thread thread = new Thread(() => creerTacheImprimante(imprimante));
-            thread.Start();
+            lock (Imprimantes)
+            {
+                Imprimantes.Add(imprimante);
+            }
+        }
+
+        public void SupprimerImprimante(Imprimante imprimante)
+        {
+            lock(Imprimantes)
+            {
+                Imprimantes.Remove(imprimante);
+            }
         }
 
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            Imprimante Imp = Imprimantes.First();
+            Imprimante imprimanteLaPlusRapide = Imprimantes.First();
             float tmpMin = Imprimantes.First().TempsPrévu(doc);
-            foreach (Imprimante impremante in Imprimantes)
+            foreach (Imprimante imprimante in Imprimantes)
             {
-                float tempImprimante = impremante.TempsPrévu(doc);
-                if (tempImprimante < tmpMin)
+                float tmpImprimante = imprimante.TempsPrévu(doc);
+                if (tmpImprimante < tmpMin)
                 {
-                    tmpMin = tempImprimante;
-                    Imp = impremante;
+                    tmpMin = tmpImprimante;
+                    imprimanteLaPlusRapide = imprimante;
                 }
             }
-            return Imp;
+            return imprimanteLaPlusRapide;
         }
 
-        private void creerTacheImprimante(Imprimante imprimante)
+        private void creerTachesImprimantes()
         {
-            Task<int> taskImprimante = new Task<int>(imprimante.Travailler);
-            taskImprimante.Start();
-            int waitFor = taskImprimante.Result;
+            foreach (Imprimante imprimante in Imprimantes)
+            {
+                Task tache = new Task(imprimante.Travailler);
+                tache.Start();
+            }
+
+            //Eviter le while(true) qui consomme du CPU
+            //On pourrait aussi faire un système de portique et faire un WaitOne pour quitter proprement
+            Thread.Sleep(Timeout.Infinite);
+            while(true)
+            {
+
+            }
         }
     }
 }
