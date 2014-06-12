@@ -9,12 +9,31 @@ namespace ServiceImpression.Data
 {
     public class Imprimante
     {
+        private int nbPagesRestantes;
+        private readonly Object verrouPagesRestantes = new object();
         public string Nom { get; set; }
         public float PagesParMinute { get; set; }
         public Etat Etat { get; private set; }
         public List<Document> DocumentsEnAttente { get; private set; }
         public List<Document> DocumentsEnErreur { get; private set; }
-        private int NbPagesRestantes;
+        public int NbPagesRestantes { 
+            get 
+            {
+                int copy;
+                lock (verrouPagesRestantes)
+                {
+                    copy = nbPagesRestantes;
+                }
+                return copy;
+            } 
+            set 
+            {
+                lock (verrouPagesRestantes)
+                {
+                    nbPagesRestantes = value;
+                }
+            } 
+        }
         public EventWaitHandle EvenementImprimer { get; private set; }
         public Document DocumentEnCours { get; set; }
 
@@ -69,7 +88,14 @@ namespace ServiceImpression.Data
         public float TempsTotalPourDocumentsEnAttente()
         {
             float temps = 0;
-            List<Document> documentsEnAttente = new List<Document>(DocumentsEnAttente);
+
+            List<Document> documentsEnAttente = new List<Document>();
+
+            lock (DocumentsEnAttente)
+            {
+                documentsEnAttente = DocumentsEnAttente;
+            }
+
             foreach(Document docEnAttente in documentsEnAttente) 
             {
                 temps += GetTempsPrévuPourDoc(docEnAttente);
@@ -100,8 +126,11 @@ namespace ServiceImpression.Data
             {
                 if (DocumentsEnAttente.ElementAt(i).Id == id)
                 {
-                    DocumentsEnAttente.RemoveAt(i);
-                    break;
+                    lock (DocumentsEnAttente)
+                    {
+                        DocumentsEnAttente.RemoveAt(i);
+                        break;
+                    }
                 }
             }
         }

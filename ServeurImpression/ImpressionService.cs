@@ -62,7 +62,18 @@ namespace ServeurImpression
 
         public void AjouterImprimante(Imprimante imprimante)
         {
-            Imprimantes.Add(imprimante);
+            lock (Imprimantes)
+            {
+                Imprimantes.Add(imprimante);
+            }
+        }
+
+        public void SupprimerImprimante(Imprimante imprimante)
+        {
+            lock(Imprimantes)
+            {
+                Imprimantes.Remove(imprimante);
+            }
         }
 
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
@@ -92,6 +103,10 @@ namespace ServeurImpression
             //Eviter le while(true) qui consomme du CPU
             //On pourrait aussi faire un système de portique et faire un WaitOne pour quitter proprement
             Thread.Sleep(Timeout.Infinite);
+            while(true)
+            {
+
+            }
         }
     }
 }
