@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServiceImpression.Data
 {
+    [DataContract]
     public class Imprimante
     {
-        private int nbPagesRestantes;
-        private readonly Object verrouPagesRestantes = new object();
+        [DataMember]
         public string Nom { get; set; }
+
+        [DataMember]
         public float PagesParMinute { get; set; }
+
+        [DataMember]
         public Etat Etat { get; private set; }
         public List<Document> DocumentsEnAttente { get; private set; }
         public List<Document> DocumentsEnErreur { get; private set; }
+
+        private int nbPagesRestantes;
+        private readonly Object verrouPagesRestantes = new object();
         public int NbPagesRestantes { 
             get 
             {

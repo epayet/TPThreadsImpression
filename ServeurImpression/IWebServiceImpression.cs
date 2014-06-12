@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceImpression.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,6 +14,18 @@ namespace ServeurImpression
     public interface IWebServiceImpression
     {
         [OperationContract]
-        string GetData(int value);
+        Imprimante AjouterDocument(Document document);
+
+        [OperationContract]
+        void SupprimerDocument(Document document);
+
+        [OperationContract]
+        List<Imprimante> GetImprimantes();
+
+        [OperationContract]
+        void AjouterImprimante(Imprimante imprimante);
+
+        [OperationContract]
+        void SupprimerImprimante(Imprimante imprimante);
     }
 }

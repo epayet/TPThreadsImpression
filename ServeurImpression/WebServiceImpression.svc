@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="ServeurImpression.Service1" CodeBehind="WebServiceImpression.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="ServeurImpression.WebServiceImpression" CodeBehind="WebServiceImpression.svc.cs" %>
