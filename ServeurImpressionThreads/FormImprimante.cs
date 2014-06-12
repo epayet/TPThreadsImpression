@@ -39,7 +39,7 @@ namespace ServeurImpressionThreads
             progressBarImpression.Value = e.ProgressPercentage;
         }
 
-        void MAJListeDocuments()
+        public void MAJListeDocuments()
         {
             listBoxImpressionsImprimante.Items.Clear();
             for (int i = 0; i < monImprimante.DocumentsEnAttente.Count; i++)

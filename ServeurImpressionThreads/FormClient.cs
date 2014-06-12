@@ -15,13 +15,15 @@ namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
+        private List<FormImprimante> listeFormsImprimantes;
         private ServeurCommunication monServeur;
 
-        public FormClient(ServeurCommunication monServCom)
+        public FormClient(ServeurCommunication monServCom, List<FormImprimante> listeFormsImp)
         {
             InitializeComponent();
             monServeur = monServCom;
-            
+            listeFormsImprimantes = new List<FormImprimante>();
+            listeFormsImprimantes = listeFormsImp;
         }
 
         public byte[] ConvertirDocumentEnBytes(String cheminFichier)
@@ -59,6 +61,17 @@ namespace ServeurImpressionThreads
         {
             listBoxFichierAImprimer.Items.Remove(listBoxFichierAImprimer.SelectedItem);
             //monServeur.SupprimerDocument(listBoxFichierAImprimer.SelectedItem.ToString());
+        }
+
+        public void MAJListeImpressionsImprimante(String nomImp)
+        {
+            foreach (FormImprimante uneFormImp in listeFormsImprimantes)
+            {
+                if (uneFormImp.Name == nomImp)
+                {
+                    uneFormImp.MAJListeDocuments();
+                }
+            }
         }
 
     }
