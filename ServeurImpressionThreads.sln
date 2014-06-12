@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientImpression", "Serveur
 		{288E98BE-E12E-48E1-A7FE-4CEAC70968CB} = {288E98BE-E12E-48E1-A7FE-4CEAC70968CB}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServeurImpression", "ServeurImpression\ServeurImpression.csproj", "{288E98BE-E12E-48E1-A7FE-4CEAC70968CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceImpression", "ServeurImpression\ServiceImpression.csproj", "{288E98BE-E12E-48E1-A7FE-4CEAC70968CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

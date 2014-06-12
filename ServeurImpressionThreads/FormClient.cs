@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ServeurImpressionThreads;
 using System.IO;
 using ServeurImpression;
+using ServiceImpression.Data;
 
 namespace ServeurImpressionThreads
 {
@@ -17,10 +18,11 @@ namespace ServeurImpressionThreads
     {
         private ServeurCommunication monServeur;
 
-        public FormClient()
+        public FormClient(ServeurCommunication monServCom)
         {
             InitializeComponent();
-            monServeur = new SimpleServeur();
+            monServeur = monServCom;
+            
         }
 
         public byte[] ConvertirDocumentEnBytes(String cheminFichier)

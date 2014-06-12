@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ServeurImpression
+namespace ServiceImpression.Data
 {
     public class Imprimante
     {
@@ -16,6 +16,7 @@ namespace ServeurImpression
         public List<Document> DocumentsEnErreur { get; private set; }
         private int NbPagesRestantes;
         public EventWaitHandle EvenementImprimer { get; private set; }
+        public Document DocumentEnCours { get; set; }
 
         public Imprimante(string nom, float pagesParMinute)
         {
@@ -26,39 +27,38 @@ namespace ServeurImpression
             EvenementImprimer = new AutoResetEvent(false);
         }
 
-        public int Travailler()
+        public void Travailler()
         {
             while (true)
             {
                 EvenementImprimer.WaitOne();
                 while (PeutImprimer())
                 {
-                    Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
-                    Document documentImprimé = Imprimer();
-                    Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, documentImprimé.Nom);
+                    Imprimer();
                 }
             }
-            return -1;
         }
 
-        public Document Imprimer()
+        public void Imprimer()
         {
-            Document documentEnCours = DocumentsEnAttente.First();
+            Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
+            DocumentEnCours = DocumentsEnAttente.First();
             DocumentsEnAttente.RemoveAt(0);
 
-            NbPagesRestantes = documentEnCours.GetNbPages();
-            float tempsDImpression = getTempsPrévuPourDoc(documentEnCours);
+            NbPagesRestantes = DocumentEnCours.GetNbPages();
+            float tempsDImpression = GetTempsPrévuPourDoc(DocumentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
             int nbPagesImprimees = 1;
-            while (NbPagesRestantes != 0)
+            while (NbPagesRestantes != 0 && DocumentEnCours != null)
             {
                 Thread.Sleep((int)(tempsDImpressionPourUnePage * 1000));
-                Console.WriteLine("Page {0} imprimée", nbPagesImprimees);
+                Console.WriteLine("{0}: Page {1} imprimée", Nom, nbPagesImprimees);
                 NbPagesRestantes--;
                 nbPagesImprimees++;
             }
 
-            return documentEnCours;
+            Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, DocumentEnCours.Nom);
+            DocumentEnCours = null;
         }
 
         public float TempsPrévu(Document doc)
@@ -72,14 +72,15 @@ namespace ServeurImpression
             List<Document> documentsEnAttente = new List<Document>(DocumentsEnAttente);
             foreach(Document docEnAttente in documentsEnAttente) 
             {
-                temps += getTempsPrévuPourDoc(docEnAttente);
+                temps += GetTempsPrévuPourDoc(docEnAttente);
             }
             return temps;
         }
 
-        public void AjouterDocumentAImprimer(Document doc)
+        public void AjouterDocument(Document doc)
         {
             DocumentsEnAttente.Add(doc);
+            //Déclenche l'évènement d'impression
             EvenementImprimer.Set();
         }
 
@@ -93,7 +94,7 @@ namespace ServeurImpression
             return null;
         }
 
-        public void SupprimerDocument(int id)
+        public void SupprimerDocumentEnAttente(int id)
         {
             for (int i = 0; i < DocumentsEnAttente.Count; i++)
             {
@@ -110,9 +111,19 @@ namespace ServeurImpression
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
-        public float getTempsPrévuPourDoc(Document doc)
+        public float GetTempsPrévuPourDoc(Document doc)
         {
             return (doc.GetNbPages() * PagesParMinute) * 60;
+        }
+
+        public bool EstEnCoursDImpression(int id)
+        {
+            return DocumentEnCours != null && DocumentEnCours.Id == id;
+        }
+
+        public void AnnulerImpression()
+        {
+            DocumentEnCours = null;
         }
 
         private float getTempsRestantDocEnCours()

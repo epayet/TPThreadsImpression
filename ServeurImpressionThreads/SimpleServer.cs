@@ -4,26 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceImpression.Data;
 
 namespace ServeurImpressionThreads
 {
     public class SimpleServeur : ServeurCommunication
     {
-        private Serveur monServeur;
+        public ImpressionService monServeur;
 
         public SimpleServeur()
         {
-            monServeur = new Serveur();
+            monServeur = new ImpressionService();
         }
 
         public void AjouterDocument(Document monDoc)
         {
-            monServeur.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(monDoc);
+            monServeur.AjouterDocument(monDoc);
         }
 
         public void SupprimerDocument(Document monDoc)
         {
             //monServeur.AnnulerImpression(monDoc);
+        }
+
+        public List<Imprimante> GetImprimantes()
+        {
+            return monServeur.Imprimantes;
         }
     }
 }

@@ -4,30 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ServiceImpression.Data;
 
 namespace ServeurImpressionThreads
 {
     static class Program
     {
+        private static ServeurCommunication monServeurComm;
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormClient());
+            monServeurComm = ServeurFactory.Create();
+            CreerFenetresImprimantes();
+            Application.Run(new FormClient(monServeurComm));
+            
+        }
 
-            //Lancer serveurs
-            SimpleServeur serveur = new SimpleServeur();
-            /*
-             * Serveur serv = new Serveur();
-            Imprimante Imp = new Imprimante("imp1", 2);
-            serv.AjouterImprimante(Imp);
-            Document doc = new Document("doc1", new byte[10000]);
-            serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc);
-            Document doc2 = new Document("doc2", new byte[10000]);
-            serv.AjouterLeDocumentALImprimanteQuiPrendLeMoinsDeTemps(doc2);
-            FormClient monFormClient = new FormClient();
-            monFormClient.Show();*/
+        private static void CreerFenetresImprimantes()
+        {
+            foreach (Imprimante uneImp in monServeurComm.GetImprimantes())
+            {
+                FormImprimante maFormImp = new FormImprimante(uneImp);
+                maFormImp.Show();
+            }
         }
     }
 }

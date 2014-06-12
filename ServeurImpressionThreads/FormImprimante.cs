@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ServeurImpression;
 using System.Threading;
+using ServiceImpression.Data;
 
 namespace ServeurImpressionThreads
 {
@@ -54,13 +55,16 @@ namespace ServeurImpressionThreads
             {
                 //Met à jour la progressbar suivant le fichier en cours d'impression
                 int nombrePagesTotalDocument = (int)monImprimante.DocumentsEnAttente[0].GetNbPages();
+                double pourcentage = 0;
                 for (int i = 0; i < nombrePagesTotalDocument; i++)
                 {
-                    double pourcentage = 0;
-                    pourcentage = monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / i * 100;
+                    //MAJ du % de la progressBar
+                    pourcentage = monImprimante.GetTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / i * 100;
                     backgroundWorkerImprimante.ReportProgress((int)pourcentage);
+
                     //Sleep (pendant le temps d'imrpession d'une page)
-                    Thread.Sleep((int)monImprimante.getTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / nombrePagesTotalDocument * 1000);
+                    int tempsImpressionUnePageDuDoc = (int)monImprimante.GetTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / nombrePagesTotalDocument * 1000;
+                    Thread.Sleep(tempsImpressionUnePageDuDoc);
                 }
             }
             else
