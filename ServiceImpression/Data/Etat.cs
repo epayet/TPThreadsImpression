@@ -9,8 +9,11 @@ namespace ServiceImpression.Data
     [DataContract]
     public enum Etat
     {
+        [EnumMember]
         EN_LIGNE,
+        [EnumMember]
         HORS_LIGNE,
+        [EnumMember]
         ERREUR
     }
 }

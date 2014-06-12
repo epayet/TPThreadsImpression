@@ -10,8 +10,6 @@ using System.Text;
 
 namespace ServeurImpression
 {
-    // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom de classe "Service1" dans le code, le fichier svc et le fichier de configuration.
-    // REMARQUE : pour lancer le client test WCF afin de tester ce service, sélectionnez Service1.svc ou Service1.svc.cs dans l'Explorateur de solutions et démarrez le débogage.
     public class WebServiceImpression : IWebServiceImpression
     {
         private ImpressionService _impressionService;
@@ -20,7 +18,7 @@ namespace ServeurImpression
             get
             {
                 if (_impressionService == null)
-                    _impressionService = new ImpressionService();
+                    _impressionService = creerImpressionService();
                 return _impressionService;
             }
             set
@@ -36,7 +34,7 @@ namespace ServeurImpression
 
         public void SupprimerDocument(Document document)
         {
-
+            impressionService.SupprimerDocument(document);
         }
 
         public List<Imprimante> GetImprimantes()
@@ -46,12 +44,19 @@ namespace ServeurImpression
 
         public void AjouterImprimante(Imprimante imprimante)
         {
-
+            impressionService.AjouterImprimante(imprimante);
         }
 
         public void SupprimerImprimante(Imprimante imprimante)
         {
+            impressionService.SupprimerImprimante(imprimante);
+        }
 
+        private ImpressionService creerImpressionService()
+        {
+            ImpressionService service = new ImpressionService();
+            service.Lancer();
+            return service;
         }
     }
 }

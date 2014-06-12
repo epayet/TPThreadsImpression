@@ -11,15 +11,16 @@ using ServeurImpressionThreads;
 using System.IO;
 using ServiceImpression;
 using ServiceImpression.Data;
+using ServeurImpressionThreads.Serveur;
 
 namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
         private List<FormImprimante> listeFormsImprimantes;
-        private ServeurCommunication monServeur;
+        private IServeur monServeur;
 
-        public FormClient(ServeurCommunication monServCom, List<FormImprimante> listeFormsImp)
+        public FormClient(IServeur monServCom, List<FormImprimante> listeFormsImp)
         {
             InitializeComponent();
             monServeur = monServCom;

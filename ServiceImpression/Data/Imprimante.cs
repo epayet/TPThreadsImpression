@@ -69,9 +69,12 @@ namespace ServiceImpression.Data
         public void Imprimer()
         {
             Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
+            //Accès concurentiel possible
             DocumentEnCours = DocumentsEnAttente.First();
+            //Accès concurentiel possible
             DocumentsEnAttente.RemoveAt(0);
 
+            //Accès concurentiel possible
             NbPagesRestantes = DocumentEnCours.GetNbPages();
             float tempsDImpression = GetTempsPrévuPourDoc(DocumentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
@@ -85,6 +88,7 @@ namespace ServiceImpression.Data
             }
 
             Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, DocumentEnCours.Nom);
+            //Accès concurentiel possible
             DocumentEnCours = null;
         }
 
@@ -101,6 +105,7 @@ namespace ServiceImpression.Data
 
             lock (DocumentsEnAttente)
             {
+                //TODO clone plutot que =
                 documentsEnAttente = DocumentsEnAttente;
             }
 
@@ -113,6 +118,7 @@ namespace ServiceImpression.Data
 
         public void AjouterDocument(Document doc)
         {
+            //Accès concurentiel possible
             DocumentsEnAttente.Add(doc);
             //Déclenche l'évènement d'impression
             EvenementImprimer.Set();
@@ -120,6 +126,7 @@ namespace ServiceImpression.Data
 
         public Document GetDocumentParId(int id)
         {
+            //Accès concurentiel possible
             foreach (Document doc in DocumentsEnAttente)
             {
                 if (doc.Id == id)
@@ -130,8 +137,10 @@ namespace ServiceImpression.Data
 
         public void SupprimerDocumentEnAttente(int id)
         {
+            //Accès concurentiel possible
             for (int i = 0; i < DocumentsEnAttente.Count; i++)
             {
+                //Accès concurentiel possible
                 if (DocumentsEnAttente.ElementAt(i).Id == id)
                 {
                     lock (DocumentsEnAttente)
@@ -145,6 +154,7 @@ namespace ServiceImpression.Data
 
         public bool PeutImprimer()
         {
+            //Accès concurentiel possible
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
@@ -155,11 +165,13 @@ namespace ServiceImpression.Data
 
         public bool EstEnCoursDImpression(int id)
         {
+            //Accès concurentiel possible
             return DocumentEnCours != null && DocumentEnCours.Id == id;
         }
 
         public void AnnulerImpression()
         {
+            //Accès concurentiel possible
             DocumentEnCours = null;
         }
 
@@ -170,6 +182,7 @@ namespace ServiceImpression.Data
 
         private bool estLibre()
         {
+            //Accès concurentiel possible
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count == 0;
         }
     }

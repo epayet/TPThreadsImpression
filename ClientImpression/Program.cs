@@ -5,19 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ServiceImpression.Data;
+using ServeurImpressionThreads.Serveur;
 
 namespace ServeurImpressionThreads
 {
     static class Program
     {
-        private static ServeurCommunication monServeurComm;
+        private static IServeur monServeurComm;
 
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            monServeurComm = ServeurFactory.Create();
+            monServeurComm = ServeurFactory.Create(ServeurStrategie.SIMPLE);
             List<Imprimante> listeImprimantes = new List<Imprimante>();
             List<FormImprimante> listeFormsImprimantes = new List<FormImprimante>();
             listeFormsImprimantes = CreerFenetresImprimantes(listeImprimantes);

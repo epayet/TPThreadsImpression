@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceImpression.Data;
 
-namespace ServeurImpressionThreads
+namespace ServeurImpressionThreads.Serveur.Strategie
 {
-    public class SimpleServeur : ServeurCommunication
+    public class SimpleServeur : IServeur
     {
         public ImpressionService monServeur;
 

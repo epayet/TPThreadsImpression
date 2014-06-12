@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientImpression", "ClientImpression\ClientImpression.csproj", "{F9DC1DEB-0127-4FD4-BEEB-3F5FB848A565}"
 	ProjectSection(ProjectDependencies) = postProject
+		{567DEF1B-AD18-45BA-A33D-421B74B8BF92} = {567DEF1B-AD18-45BA-A33D-421B74B8BF92}
 		{288E98BE-E12E-48E1-A7FE-4CEAC70968CB} = {288E98BE-E12E-48E1-A7FE-4CEAC70968CB}
 	EndProjectSection
 EndProject

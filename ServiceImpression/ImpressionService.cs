@@ -26,6 +26,9 @@ namespace ServiceImpression
 
         public Imprimante AjouterDocument(Document doc)
         {
+            if(Imprimantes.Count == 0)
+                throw new Exception("Le serveur ne contient pas encore d'imprimantes. Document non ajouté");
+
             Imprimante imprimante = imprimanteQuiPrendLeMoinsDeTemps(doc);
             imprimante.AjouterDocument(doc);
             return imprimante;
