@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceImpression.Data;
 
-namespace ServeurImpression
+namespace ServiceImpression
 {
     class Program
     {

@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading;
 using ServiceImpression.Data;
 
-namespace ServeurImpression
+namespace ServiceImpression
 {
     public class ImpressionService
     {

@@ -90,7 +90,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServeurImpression\ServiceImpression.csproj">
+    <ProjectReference Include="..\ServiceImpression\ServiceImpression.csproj">
       <Project>{288e98be-e12e-48e1-a7fe-4ceac70968cb}</Project>
       <Name>ServiceImpression</Name>
     </ProjectReference>
