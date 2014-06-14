@@ -56,7 +56,7 @@ namespace ServiceImpression.Data
 
         public void Travailler()
         {
-            while (true)
+            while (arreterImprimante)
             {
                 EvenementImprimer.WaitOne();
                 while (PeutImprimer())
@@ -64,6 +64,14 @@ namespace ServiceImpression.Data
                     Imprimer();
                 }
             }
+        }
+        private bool arreterImprimante = true; 
+        
+        public void ArreterImprimante()
+        {
+            arreterImprimante = false;
+            EvenementImprimer.Set();
+
         }
 
         public void Imprimer()

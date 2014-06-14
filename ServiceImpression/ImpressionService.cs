@@ -12,10 +12,17 @@ namespace ServiceImpression
     public class ImpressionService
     {
         public List<Imprimante> Imprimantes { get; private set; }
+        private List<Imprimante> imprimanteASupprimer = new List<Imprimante>();
+        private List<Imprimante> imprimanteAAjouter = new List<Imprimante>();
 
+        public EventWaitHandle ImprimanteesModifiesEvent { get; private set; }
+
+        Dictionary<Imprimante, Task> DicoImprimante = new Dictionary<Imprimante, Task>();
+ 
         public ImpressionService() 
         {
             Imprimantes = new List<Imprimante>();
+            ImprimanteesModifiesEvent = new AutoResetEvent(false);
         }
 
         public void Lancer()
@@ -65,17 +72,18 @@ namespace ServiceImpression
 
         public void AjouterImprimante(Imprimante imprimante)
         {
-            lock (Imprimantes)
-            {
-                Imprimantes.Add(imprimante);
-            }
+            imprimanteAAjouter.Add(imprimante);
+            ImprimanteesModifiesEvent.Set();
+
         }
 
         public void SupprimerImprimante(Imprimante imprimante)
         {
+           
             lock(Imprimantes)
             {
-                Imprimantes.Remove(imprimante);
+                imprimanteASupprimer.Add(imprimante);
+                ImprimanteesModifiesEvent.Set();
             }
         }
 
@@ -97,19 +105,25 @@ namespace ServiceImpression
 
         private void creerTachesImprimantes()
         {
-            foreach (Imprimante imprimante in Imprimantes)
-            {
-                Task tache = new Task(imprimante.Travailler);
-                tache.Start();
-            }
-
-            //Eviter le while(true) qui consomme du CPU
-            //On pourrait aussi faire un système de portique et faire un WaitOne pour quitter proprement
-            Thread.Sleep(Timeout.Infinite);
             while(true)
             {
+                ImprimanteesModifiesEvent.WaitOne();
+                foreach (Imprimante newImprimante in imprimanteAAjouter)
+                {
+                    Imprimantes.Add(newImprimante);
+                    Task tache = new Task(newImprimante.Travailler);
+                    tache.Start();
+                    
+                    imprimanteAAjouter.Remove(newImprimante);
+                }
 
-            }
+                foreach (Imprimante oldImprimante in imprimanteASupprimer)
+                {
+                    Imprimantes.Remove(oldImprimante);
+                    imprimanteASupprimer.Remove(oldImprimante);
+                    oldImprimante.ArreterImprimante();
+                }
+        }
         }
     }
 }
