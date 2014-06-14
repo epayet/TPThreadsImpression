@@ -19,20 +19,48 @@ namespace ServiceImpression.Data
 
         [DataMember]
         public Etat Etat { get; private set; }
-        public List<Document> DocumentsEnAttente { get; private set; }
-        public List<Document> DocumentsEnErreur { get; private set; }
-
+        public List<Document> DocumentsEnAttente {
+            get 
+            {
+                List<Document> copy;
+                lock (DocumentsEnAttente)
+                {
+                    copy = new List<Document>(DocumentsEnAttente);
+                }
+                return copy;
+            } 
+            set 
+            {
+                lock (DocumentsEnAttente)
+                {
+                    DocumentsEnAttente = value;
+                }
+            } 
+        }
+        public List<Document> DocumentsEnErreur {
+             get 
+            {
+                List<Document> copy;
+                lock (DocumentsEnErreur)
+                {
+                    copy = new List<Document>(DocumentsEnErreur);
+                }
+                return copy;
+            } 
+            set 
+            {
+                lock (DocumentsEnErreur)
+                {
+                    DocumentsEnErreur = value;
+                }
+            } 
+        }
         private int nbPagesRestantes;
         private readonly Object verrouPagesRestantes = new object();
         public int NbPagesRestantes { 
             get 
             {
-                int copy;
-                lock (verrouPagesRestantes)
-                {
-                    copy = nbPagesRestantes;
-                }
-                return copy;
+                return nbPagesRestantes;
             } 
             set 
             {
@@ -43,8 +71,24 @@ namespace ServiceImpression.Data
             } 
         }
         public EventWaitHandle EvenementImprimer { get; private set; }
-        public Document DocumentEnCours { get; set; }
-
+        public Document DocumentEnCours {
+            get
+            {
+                Document copy;
+                lock (DocumentEnCours)
+                {
+                    copy = DocumentEnCours.Clone();
+                }
+                return copy;
+            } 
+            set
+            {
+                lock (DocumentEnCours)
+                {
+                    DocumentEnCours = value;
+                }
+            }
+        }
         public Imprimante(string nom, float pagesParMinute)
         {
             Nom = nom;

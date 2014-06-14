@@ -33,6 +33,11 @@ namespace ServiceImpression.Data
         {
             return Contenu.Length / 100000;
         }
-    
+
+
+        public Document Clone()
+        {
+            return new Document(this.Nom, this.Contenu);
+        }
     }
 }
