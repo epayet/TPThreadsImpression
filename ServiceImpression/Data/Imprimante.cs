@@ -22,7 +22,7 @@ namespace ServiceImpression.Data
 
         [DataMember]
         public List<Document> DocumentsEnAttente {
-            get 
+            get
             {
                 List<Document> copy;
                 lock (DocumentsEnAttente)

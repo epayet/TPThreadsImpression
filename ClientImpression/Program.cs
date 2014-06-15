@@ -15,7 +15,7 @@ namespace ServeurImpressionThreads
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            WebServiceImpressionClient webServiceClient = new WebServiceImpressionClient();
+            WebServiceImpressionClient webServiceClient = CreerWebServiceClient();
 
             List<FormImprimante> formImprimantes = CreerFenetresImprimantes(webServiceClient);
             Application.Run(new FormClient(webServiceClient, formImprimantes));
@@ -31,6 +31,24 @@ namespace ServeurImpressionThreads
                 listeForms.Add(maFormImp);
             }
             return listeForms;
+        }
+
+        private static WebServiceImpressionClient CreerWebServiceClient()
+        {
+            WebServiceImpressionClient client = new WebServiceImpressionClient();
+            Imprimante imp1 = new Imprimante
+            {
+                Nom = "Imp1",
+                PagesParMinute = 0.01f
+            };
+            client.AjouterImprimante(imp1);
+            Imprimante imp2 = new Imprimante
+            {
+                Nom = "Imp2",
+                PagesParMinute = 0.1f
+            };
+            client.AjouterImprimante(imp2);
+            return client;
         }
     }
 }
