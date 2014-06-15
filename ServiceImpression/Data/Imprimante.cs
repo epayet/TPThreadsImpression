@@ -19,6 +19,8 @@ namespace ServiceImpression.Data
 
         [DataMember]
         public Etat Etat { get; private set; }
+
+        [DataMember]
         public List<Document> DocumentsEnAttente {
             get 
             {

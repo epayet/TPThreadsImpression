@@ -52,6 +52,17 @@ namespace ServeurImpression
             impressionService.SupprimerImprimante(imprimante);
         }
 
+
+        public int GetDocumentNbPages(Document document)
+        {
+            return document.GetNbPages();
+        }
+
+        public float GetTempsPrevuPourImpression(Imprimante imprimante, Document document)
+        {
+            return imprimante.GetTempsPrévuPourDoc(document);
+        }
+
         private ImpressionService creerImpressionService()
         {
             ImpressionService service = new ImpressionService();

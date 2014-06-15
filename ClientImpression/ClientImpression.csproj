@@ -60,11 +60,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serveur\IServeur.cs" />
-    <Compile Include="Serveur\ServeurFactory.cs" />
-    <Compile Include="Serveur\ServeurStrategie.cs" />
-    <Compile Include="Serveur\Strategie\SimpleServeur.cs" />
-    <Compile Include="Serveur\Strategie\WebServiceServeur.cs" />
+    <Compile Include="Service References\WebServiceImpression\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormClient.resx">
       <DependentUpon>FormClient.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,6 +89,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\WebServiceImpression\ServeurImpressionThreads.WebServiceImpression.Imprimante.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WebServiceImpression\WebServiceImpression.wsdl" />
+    <None Include="Service References\WebServiceImpression\WebServiceImpression.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WebServiceImpression\WebServiceImpression1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WebServiceImpression\WebServiceImpression2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -97,10 +110,25 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServiceImpression\ServiceImpression.csproj">
-      <Project>{288e98be-e12e-48e1-a7fe-4ceac70968cb}</Project>
-      <Name>ServiceImpression</Name>
-    </ProjectReference>
+    <WCFMetadataStorage Include="Service References\WebServiceImpression\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebServiceImpression\WebServiceImpression.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebServiceImpression\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebServiceImpression\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebServiceImpression\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Serveur\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

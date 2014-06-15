@@ -26,5 +26,11 @@ namespace ServeurImpression
 
         [OperationContract]
         void SupprimerImprimante(Imprimante imprimante);
+
+        [OperationContract]
+        int GetDocumentNbPages(Document document);
+
+        [OperationContract]
+        float GetTempsPrevuPourImpression(Imprimante imprimante, Document document);
     }
 }

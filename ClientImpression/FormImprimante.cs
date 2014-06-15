@@ -7,21 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ServiceImpression;
 using System.Threading;
-using ServiceImpression.Data;
+using ServeurImpressionThreads.WebServiceImpression;
 
 namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
         private Imprimante monImprimante;
+        private WebServiceImpressionClient webServiceClient;
 
-        public FormImprimante(Imprimante uneImprimante)
+        public FormImprimante(Imprimante uneImprimante, WebServiceImpressionClient webServiceClient)
         {
             InitializeComponent();
             monImprimante = uneImprimante;
+            this.webServiceClient = webServiceClient;
             this.Text = uneImprimante.Nom;
+            this.Name = uneImprimante.Nom;
         }
 
         private void FormImprimante_Load(object sender, EventArgs e)
@@ -54,17 +56,18 @@ namespace ServeurImpressionThreads
             if (backgroundWorkerImprimante.CancellationPending == false)
             {
                 //Met à jour la progressbar suivant le fichier en cours d'impression
-                int nombrePagesTotalDocument = (int)monImprimante.DocumentsEnAttente[0].GetNbPages();
+                int nombrePagesTotalDocument = webServiceClient.GetDocumentNbPages(monImprimante.DocumentsEnAttente[0]);
                 double pourcentage = 0;
                 for (int i = 0; i < nombrePagesTotalDocument; i++)
                 {
                     //MAJ du % de la progressBar
-                    pourcentage = monImprimante.GetTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / i * 100;
+                    float tempsPrevu = webServiceClient.GetTempsPrevuPourImpression(monImprimante, monImprimante.DocumentsEnAttente[0]);
+                    pourcentage = tempsPrevu / i * 100;
                     backgroundWorkerImprimante.ReportProgress((int)pourcentage);
 
                     //Sleep (pendant le temps d'imrpession d'une page)
-                    int tempsImpressionUnePageDuDoc = (int)monImprimante.GetTempsPrévuPourDoc(monImprimante.DocumentsEnAttente[0]) / nombrePagesTotalDocument * 1000;
-                    Thread.Sleep(tempsImpressionUnePageDuDoc);
+                    float tempsImpressionUnePageDuDoc = tempsPrevu / nombrePagesTotalDocument * 1000;
+                    Thread.Sleep((int)tempsImpressionUnePageDuDoc);
                 }
             }
             else

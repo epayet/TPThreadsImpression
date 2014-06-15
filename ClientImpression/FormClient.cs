@@ -9,22 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ServeurImpressionThreads;
 using System.IO;
-using ServiceImpression;
-using ServiceImpression.Data;
-using ServeurImpressionThreads.Serveur;
+using ServeurImpressionThreads.WebServiceImpression;
 
 namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
         private List<FormImprimante> listeFormsImprimantes;
-        private IServeur monServeur;
+        private WebServiceImpressionClient webServiceClient;
 
-        public FormClient(IServeur monServCom, List<FormImprimante> listeFormsImp)
+        public FormClient(WebServiceImpressionClient webServiceClient, List<FormImprimante> listeFormsImp)
         {
             InitializeComponent();
-            monServeur = monServCom;
-            listeFormsImprimantes = new List<FormImprimante>();
+            this.webServiceClient = webServiceClient;
             listeFormsImprimantes = listeFormsImp;
         }
 
@@ -52,9 +49,13 @@ namespace ServeurImpressionThreads
                 for (int i = 0; i < cheminsFichiers.Length; i++)
                 {
                     byte[] contenuDoc = ConvertirDocumentEnBytes(cheminsFichiers[i]);
-                    Document monDoc = new Document(cheminsFichiers[i], contenuDoc);
+                    Document monDoc = new Document
+                    {
+                        Nom = cheminsFichiers[i],
+                        Contenu = contenuDoc
+                    };
                     listBoxFichierAImprimer.Items.Add(cheminsFichiers[i]);
-                    monServeur.AjouterDocument(monDoc);
+                    webServiceClient.AjouterDocument(monDoc);
                 }
             }
         }

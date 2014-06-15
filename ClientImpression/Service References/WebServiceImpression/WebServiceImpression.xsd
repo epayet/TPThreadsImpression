@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="Document">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Contenu" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Document" nillable="true" type="tns:Document" />
+  <xs:complexType name="Imprimante">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DocumentsEnAttente" nillable="true" type="tns:ArrayOfDocument" />
+      <xs:element minOccurs="0" name="Etat" type="tns:Etat" />
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PagesParMinute" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Imprimante" nillable="true" type="tns:Imprimante" />
+  <xs:complexType name="ArrayOfDocument">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Document" nillable="true" type="tns:Document" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDocument" nillable="true" type="tns:ArrayOfDocument" />
+  <xs:simpleType name="Etat">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EN_LIGNE" />
+      <xs:enumeration value="HORS_LIGNE" />
+      <xs:enumeration value="ERREUR" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Etat" nillable="true" type="tns:Etat" />
+  <xs:complexType name="ArrayOfImprimante">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Imprimante" nillable="true" type="tns:Imprimante" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImprimante" nillable="true" type="tns:ArrayOfImprimante" />
+</xs:schema>
