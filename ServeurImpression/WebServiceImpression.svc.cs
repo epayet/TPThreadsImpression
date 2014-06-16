@@ -1,4 +1,5 @@
-﻿using ServiceImpression;
+﻿using ServeurImpression.Message;
+using ServiceImpression;
 using ServiceImpression.Data;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace ServeurImpression
             get
             {
                 if (_impressionService == null)
-                    _impressionService = creerImpressionService();
+                    _impressionService = new ImpressionService();
                 return _impressionService;
             }
             set
@@ -27,9 +28,12 @@ namespace ServeurImpression
             }
         }
 
-        public Imprimante AjouterDocument(Document document)
+        public Imprimante AjouterDocument(DocumentMessage documentMessage)
         {
-            return impressionService.AjouterDocument(document);
+            //TODO
+            Document document = null;
+            Imprimante imprimante = impressionService.AjouterDocument(document);
+            return imprimante;
         }
 
         public void SupprimerDocument(Document document)
@@ -39,7 +43,7 @@ namespace ServeurImpression
 
         public List<Imprimante> GetImprimantes()
         {
-            return impressionService.Imprimantes;
+            return impressionService.GetImprimantes();
         }
 
         public void AjouterImprimante(Imprimante imprimante)
@@ -49,7 +53,7 @@ namespace ServeurImpression
 
         public void SupprimerImprimante(Imprimante imprimante)
         {
-            impressionService.SupprimerImprimante(imprimante);
+            impressionService.SupprimerImprimante(imprimante.Nom);
         }
 
 
@@ -61,13 +65,6 @@ namespace ServeurImpression
         public float GetTempsPrevuPourImpression(Imprimante imprimante, Document document)
         {
             return imprimante.GetTempsPrévuPourDoc(document);
-        }
-
-        private ImpressionService creerImpressionService()
-        {
-            ImpressionService service = new ImpressionService();
-            service.Lancer();
-            return service;
         }
     }
 }

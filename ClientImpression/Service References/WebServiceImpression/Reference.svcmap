@@ -25,10 +25,11 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="WebServiceImpression.xsd" MetadataType="Schema" ID="aafa459d-e81f-44d5-9a5e-fb3427aabdb7" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?xsd=xsd2" />
-    <MetadataFile FileName="WebServiceImpression.disco" MetadataType="Disco" ID="a083acad-a4b6-4765-a333-675f092976c9" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?disco" />
-    <MetadataFile FileName="WebServiceImpression.wsdl" MetadataType="Wsdl" ID="7589f518-95d3-4b24-a63d-91c22aa0ca30" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?wsdl" />
     <MetadataFile FileName="WebServiceImpression1.xsd" MetadataType="Schema" ID="67a90074-d1ad-41af-a318-a17b4a867d68" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?xsd=xsd1" />
+    <MetadataFile FileName="WebServiceImpression3.xsd" MetadataType="Schema" ID="f7434c36-a059-43e8-a0a3-b006ebd4cc80" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?xsd=xsd3" />
+    <MetadataFile FileName="WebServiceImpression.wsdl" MetadataType="Wsdl" ID="7589f518-95d3-4b24-a63d-91c22aa0ca30" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?wsdl" />
     <MetadataFile FileName="WebServiceImpression2.xsd" MetadataType="Schema" ID="2f667115-a7c7-40c8-a6bb-856db4f66b01" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?xsd=xsd0" />
+    <MetadataFile FileName="WebServiceImpression.disco" MetadataType="Disco" ID="a083acad-a4b6-4765-a333-675f092976c9" SourceId="1" SourceUrl="http://localhost:55969/WebServiceImpression.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

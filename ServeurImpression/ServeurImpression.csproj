@@ -63,6 +63,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Message\DocumentMessage.cs" />
     <Compile Include="WebServiceImpression.svc.cs">
       <DependentUpon>WebServiceImpression.svc</DependentUpon>
     </Compile>

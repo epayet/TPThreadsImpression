@@ -10,21 +10,19 @@ namespace ServiceImpression.Data
     [DataContract]
     public class Document
     {
-        [DataMember]
-        public int Id { get; private set; }
+        public string Id { get; private set; }
 
-        [DataMember]
         public string Nom {get; set;}
 
-        [DataMember]
         public byte[] Contenu { get; set;}
 
-        private static int TotalNbDocs = 0;
+        private Document()
+        {
+
+        }
 
         public Document(string nom, byte[] contenu)
         {
-            TotalNbDocs++;
-            Id = TotalNbDocs;
             Nom = nom;
             Contenu = contenu;
         }
@@ -34,10 +32,19 @@ namespace ServiceImpression.Data
             return Contenu.Length / 100000;
         }
 
-
         public Document Clone()
         {
-            return new Document(this.Nom, this.Contenu);
+            return new Document
+                {
+                    Id = Id,
+                    Nom = Nom,
+                    Contenu = Contenu
+                };
+        }
+
+        public void GenererId()
+        {
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

@@ -102,6 +102,9 @@
     <None Include="Service References\WebServiceImpression\WebServiceImpression2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\WebServiceImpression\WebServiceImpression3.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

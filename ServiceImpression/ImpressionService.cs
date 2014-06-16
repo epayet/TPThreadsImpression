@@ -6,35 +6,26 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
 using ServiceImpression.Data;
+using System.Collections.Concurrent;
 
 namespace ServiceImpression
 {
     public class ImpressionService
     {
-        public List<Imprimante> Imprimantes { get; private set; }
-        private List<Imprimante> imprimanteASupprimer = new List<Imprimante>();
-        private List<Imprimante> imprimanteAAjouter = new List<Imprimante>();
+        public ConcurrentDictionary<string, Imprimante> Imprimantes { get; private set; }
 
-        public EventWaitHandle ImprimanteesModifiesEvent { get; private set; }
-
-        Dictionary<Imprimante, Task> DicoImprimante = new Dictionary<Imprimante, Task>();
- 
-        public ImpressionService() 
+        public ImpressionService()
         {
-            Imprimantes = new List<Imprimante>();
-            ImprimanteesModifiesEvent = new AutoResetEvent(false);
-        }
-
-        public void Lancer()
-        {
-            Thread thread = new Thread(creerTachesImprimantes);
-            thread.Start();
+            Imprimantes = new ConcurrentDictionary<string, Imprimante>();
         }
 
         public Imprimante AjouterDocument(Document doc)
         {
             if(Imprimantes.Count == 0)
                 throw new Exception("Le serveur ne contient pas encore d'imprimantes. Document non ajouté");
+
+            if (string.IsNullOrEmpty(doc.Id))
+                doc.GenererId();
 
             Imprimante imprimante = imprimanteQuiPrendLeMoinsDeTemps(doc);
             imprimante.AjouterDocument(doc);
@@ -43,14 +34,15 @@ namespace ServiceImpression
 
         public void SupprimerDocument(Document doc)
         {
-            foreach (Imprimante imprimante in Imprimantes)
+            foreach (KeyValuePair<string, Imprimante> imprimanteCleValeur in Imprimantes)
             {
+                Imprimante imprimante = imprimanteCleValeur.Value;
                 if (imprimante.EstEnCoursDImpression(doc.Id))
                 {
                     imprimante.AnnulerImpression();
                     break;
                 } 
-                else if(imprimante.GetDocumentParId(doc.Id) != null)
+                else if(imprimante.GetDocument(doc.Id) != null)
                 {
                     imprimante.SupprimerDocumentEnAttente(doc.Id);
                     break;
@@ -58,41 +50,45 @@ namespace ServiceImpression
             }
         }
 
-        public Imprimante RechercherImprimante(string nom)
+        public Imprimante GetImprimante(string nom)
         {
-            foreach (Imprimante imprimante in Imprimantes)
-            {
-                if (imprimante.Nom == nom)
-                {
-                    return imprimante;
-                }
-            }
-            return null;
+            Imprimante imprimante;
+            Imprimantes.TryGetValue(nom, out imprimante);
+            return imprimante;
         }
 
-        public void AjouterImprimante(Imprimante imprimante)
+        public void AjouterImprimante(Imprimante nouvelleImprimante)
         {
-            imprimanteAAjouter.Add(imprimante);
-            ImprimanteesModifiesEvent.Set();
-
+            Imprimantes.TryAdd(nouvelleImprimante.Nom, nouvelleImprimante);
+            Task tacheImprimante = new Task(nouvelleImprimante.Travailler);
+            tacheImprimante.Start();
         }
 
-        public void SupprimerImprimante(Imprimante imprimante)
+        public void SupprimerImprimante(string nom)
         {
-           
-            lock(Imprimantes)
+            Imprimante imprimante = GetImprimante(nom);
+            imprimante.Arreter();
+            Imprimantes.TryRemove(nom, out imprimante);
+        }
+
+        public List<Imprimante> GetImprimantes()
+        {
+            List<Imprimante> imprimantes = new List<Imprimante>();
+            foreach (KeyValuePair<string, Imprimante> imprimanteCleValeur in Imprimantes)
             {
-                imprimanteASupprimer.Add(imprimante);
-                ImprimanteesModifiesEvent.Set();
+                imprimantes.Add(imprimanteCleValeur.Value);
             }
+            return imprimantes;
         }
 
         private Imprimante imprimanteQuiPrendLeMoinsDeTemps(Document doc)
         {
-            Imprimante imprimanteLaPlusRapide = Imprimantes.First();
-            float tmpMin = Imprimantes.First().TempsPrévu(doc);
-            foreach (Imprimante imprimante in Imprimantes)
+            Imprimante premiereImprimante = Imprimantes.First().Value;
+            Imprimante imprimanteLaPlusRapide = premiereImprimante;
+            float tmpMin = premiereImprimante.TempsPrévu(doc);
+            foreach (KeyValuePair<string, Imprimante> imprimanteCleValeur in Imprimantes)
             {
+                Imprimante imprimante = imprimanteCleValeur.Value;
                 float tmpImprimante = imprimante.TempsPrévu(doc);
                 if (tmpImprimante < tmpMin)
                 {
@@ -101,29 +97,6 @@ namespace ServiceImpression
                 }
             }
             return imprimanteLaPlusRapide;
-        }
-
-        private void creerTachesImprimantes()
-        {
-            while(true)
-            {
-                ImprimanteesModifiesEvent.WaitOne();
-                foreach (Imprimante newImprimante in imprimanteAAjouter)
-                {
-                    Imprimantes.Add(newImprimante);
-                    Task tache = new Task(newImprimante.Travailler);
-                    tache.Start();
-                    
-                    imprimanteAAjouter.Remove(newImprimante);
-                }
-
-                foreach (Imprimante oldImprimante in imprimanteASupprimer)
-                {
-                    Imprimantes.Remove(oldImprimante);
-                    imprimanteASupprimer.Remove(oldImprimante);
-                    oldImprimante.ArreterImprimante();
-                }
-        }
         }
     }
 }

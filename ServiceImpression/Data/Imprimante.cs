@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,125 +12,95 @@ namespace ServiceImpression.Data
     [DataContract]
     public class Imprimante
     {
-        [DataMember]
         public string Nom { get; set; }
 
-        [DataMember]
         public float PagesParMinute { get; set; }
 
-        [DataMember]
         public Etat Etat { get; private set; }
 
-        [DataMember]
-        public List<Document> DocumentsEnAttente {
-            get
-            {
-                List<Document> copy;
-                lock (DocumentsEnAttente)
-                {
-                    copy = new List<Document>(DocumentsEnAttente);
-                }
-                return copy;
-            } 
-            set 
-            {
-                lock (DocumentsEnAttente)
-                {
-                    DocumentsEnAttente = value;
-                }
-            } 
-        }
-        public List<Document> DocumentsEnErreur {
-             get 
-            {
-                List<Document> copy;
-                lock (DocumentsEnErreur)
-                {
-                    copy = new List<Document>(DocumentsEnErreur);
-                }
-                return copy;
-            } 
-            set 
-            {
-                lock (DocumentsEnErreur)
-                {
-                    DocumentsEnErreur = value;
-                }
-            } 
-        }
-        private int nbPagesRestantes;
+        public ConcurrentDictionary<int, Document> DocumentsEnAttente = new ConcurrentDictionary<int, Document>();
+
+        public ConcurrentDictionary<string, Document> DocumentsEnErreur = new ConcurrentDictionary<string, Document>();
+
+        #region pages restantes
+        private int _nbPagesRestantes;
         private readonly Object verrouPagesRestantes = new object();
         public int NbPagesRestantes { 
             get 
             {
-                return nbPagesRestantes;
+                return _nbPagesRestantes;
             } 
             set 
             {
                 lock (verrouPagesRestantes)
                 {
-                    nbPagesRestantes = value;
+                    _nbPagesRestantes = value;
                 }
             } 
         }
-        public EventWaitHandle EvenementImprimer { get; private set; }
+        #endregion
+
+        #region document en cours
+        private readonly Object verrouDocumentEnCours = new object();
+        private Document _documentEnCours;
         public Document DocumentEnCours {
             get
             {
-                Document copy;
-                lock (DocumentEnCours)
+                Document copy = null;
+                lock (verrouDocumentEnCours)
                 {
-                    copy = DocumentEnCours.Clone();
+                    if(_documentEnCours != null)
+                        copy = _documentEnCours.Clone();
                 }
                 return copy;
             } 
             set
             {
-                lock (DocumentEnCours)
+                lock (verrouDocumentEnCours)
                 {
-                    DocumentEnCours = value;
+                    _documentEnCours = value;
                 }
             }
         }
+        #endregion
+
+        private EventWaitHandle PortiqueImpression;
+
+        private bool arreterImprimante = false;
+
         public Imprimante(string nom, float pagesParMinute)
         {
             Nom = nom;
             PagesParMinute = pagesParMinute;
-            DocumentsEnAttente = new List<Document>();
-            DocumentsEnErreur = new List<Document>();
-            EvenementImprimer = new AutoResetEvent(false);
+            PortiqueImpression = new AutoResetEvent(false);
         }
 
         public void Travailler()
         {
-            while (arreterImprimante)
+            while (!arreterImprimante)
             {
-                EvenementImprimer.WaitOne();
+                PortiqueImpression.WaitOne();
                 while (PeutImprimer())
                 {
                     Imprimer();
                 }
             }
         }
-        private bool arreterImprimante = true; 
         
-        public void ArreterImprimante()
+        public void Arreter()
         {
             arreterImprimante = false;
-            EvenementImprimer.Set();
-
+            DocumentEnCours = null;
+            NbPagesRestantes = 0;
+            PortiqueImpression.Set();
         }
 
         public void Imprimer()
         {
             Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
-            //Accès concurentiel possible
-            DocumentEnCours = DocumentsEnAttente.First();
-            //Accès concurentiel possible
-            DocumentsEnAttente.RemoveAt(0);
 
-            //Accès concurentiel possible
-            NbPagesRestantes = DocumentEnCours.GetNbPages();
+            RecupererDocumentAImprimer();
+
             float tempsDImpression = GetTempsPrévuPourDoc(DocumentEnCours);
             float tempsDImpressionPourUnePage = tempsDImpression / NbPagesRestantes;
             int nbPagesImprimees = 1;
@@ -141,8 +112,9 @@ namespace ServiceImpression.Data
                 nbPagesImprimees++;
             }
 
-            Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, DocumentEnCours.Nom);
-            //Accès concurentiel possible
+            if(DocumentEnCours != null)
+                Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, DocumentEnCours.Nom);
+            
             DocumentEnCours = null;
         }
 
@@ -154,17 +126,9 @@ namespace ServiceImpression.Data
         public float TempsTotalPourDocumentsEnAttente()
         {
             float temps = 0;
-
-            List<Document> documentsEnAttente = new List<Document>();
-
-            lock (DocumentsEnAttente)
+            foreach (KeyValuePair<int, Document> docCleValeur in DocumentsEnAttente)
             {
-                //TODO clone plutot que =
-                documentsEnAttente = DocumentsEnAttente;
-            }
-
-            foreach(Document docEnAttente in documentsEnAttente) 
-            {
+                Document docEnAttente = docCleValeur.Value;
                 temps += GetTempsPrévuPourDoc(docEnAttente);
             }
             return temps;
@@ -172,43 +136,29 @@ namespace ServiceImpression.Data
 
         public void AjouterDocument(Document doc)
         {
-            //Accès concurentiel possible
-            DocumentsEnAttente.Add(doc);
+            int nbDocs = DocumentsEnAttente.Count;
+            DocumentsEnAttente.TryAdd(nbDocs, doc);
             //Déclenche l'évènement d'impression
-            EvenementImprimer.Set();
+            PortiqueImpression.Set();
         }
 
-        public Document GetDocumentParId(int id)
+        public Document GetDocument(string id)
         {
-            //Accès concurentiel possible
-            foreach (Document doc in DocumentsEnAttente)
-            {
-                if (doc.Id == id)
-                    return doc;
-            }
-            return null;
+            Document document;
+            int indexDocumentEnAttente = getIndexDocumentEnAttente(id);
+            DocumentsEnAttente.TryGetValue(indexDocumentEnAttente, out document);
+            return document;
         }
 
-        public void SupprimerDocumentEnAttente(int id)
+        public void SupprimerDocumentEnAttente(string id)
         {
-            //Accès concurentiel possible
-            for (int i = 0; i < DocumentsEnAttente.Count; i++)
-            {
-                //Accès concurentiel possible
-                if (DocumentsEnAttente.ElementAt(i).Id == id)
-                {
-                    lock (DocumentsEnAttente)
-                    {
-                        DocumentsEnAttente.RemoveAt(i);
-                        break;
-                    }
-                }
-            }
+            Document documentSupprime;
+            int indexDocumentEnAttente = getIndexDocumentEnAttente(id);
+            DocumentsEnAttente.TryRemove(indexDocumentEnAttente, out documentSupprime);
         }
 
         public bool PeutImprimer()
         {
-            //Accès concurentiel possible
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count > 0;
         }
 
@@ -217,16 +167,37 @@ namespace ServiceImpression.Data
             return (doc.GetNbPages() * PagesParMinute) * 60;
         }
 
-        public bool EstEnCoursDImpression(int id)
+        public bool EstEnCoursDImpression(string id)
         {
-            //Accès concurentiel possible
             return DocumentEnCours != null && DocumentEnCours.Id == id;
         }
 
         public void AnnulerImpression()
         {
-            //Accès concurentiel possible
             DocumentEnCours = null;
+        }
+
+        private void RecupererDocumentAImprimer()
+        {
+            Document premierDocument;
+            int nbPremierDocumentEnAttente = getNbPremierDocumentEnAttente();
+            DocumentsEnAttente.TryGetValue(nbPremierDocumentEnAttente, out premierDocument);
+            DocumentEnCours = premierDocument;
+            NbPagesRestantes = DocumentEnCours.GetNbPages();
+            Document documentSupprime;
+            DocumentsEnAttente.TryRemove(nbPremierDocumentEnAttente, out documentSupprime);
+            nbPremierDocumentEnAttente++;
+        }
+
+        private int getNbPremierDocumentEnAttente()
+        {
+            int nbMin = DocumentsEnAttente.First().Key;
+            foreach (KeyValuePair<int, Document> docCleValeur in DocumentsEnAttente)
+            {
+                if (docCleValeur.Key < nbMin)
+                    nbMin = docCleValeur.Key;
+            }
+            return nbMin;
         }
 
         private float getTempsRestantDocEnCours()
@@ -236,8 +207,17 @@ namespace ServiceImpression.Data
 
         private bool estLibre()
         {
-            //Accès concurentiel possible
             return NbPagesRestantes == 0 && DocumentsEnAttente.Count == 0;
+        }
+
+        private int getIndexDocumentEnAttente(string id)
+        {
+            foreach (KeyValuePair<int, Document> documentsCleValeur in DocumentsEnAttente)
+            {
+                if (documentsCleValeur.Value.Id.Equals(id))
+                    return documentsCleValeur.Key;
+            }
+            throw new Exception("Document " + id + " non en file d'attente");
         }
     }
 }

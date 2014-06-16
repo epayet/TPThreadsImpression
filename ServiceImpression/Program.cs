@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServiceImpression.Data;
+using System.Threading;
 
 namespace ServiceImpression
 {
@@ -14,6 +15,7 @@ namespace ServiceImpression
             ImpressionService serveur = new ImpressionService();
             Imprimante imp = new Imprimante("imp1", 0.05f);
             serveur.AjouterImprimante(imp);
+
             Imprimante imp2 = new Imprimante("imp2", 0.01f);
             serveur.AjouterImprimante(imp2);
 
@@ -30,7 +32,8 @@ namespace ServiceImpression
                 serveur.AjouterDocument(doc);
             }
 
-            serveur.Lancer();
+            //Triche pour pas fermer le programme console
+            Console.ReadLine();
         }
     }
 }

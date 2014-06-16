@@ -1,4 +1,5 @@
-﻿using ServiceImpression.Data;
+﻿using ServeurImpression.Message;
+using ServiceImpression.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ServeurImpression
     public interface IWebServiceImpression
     {
         [OperationContract]
-        Imprimante AjouterDocument(Document document);
+        Imprimante AjouterDocument(DocumentMessage document);
 
         [OperationContract]
         void SupprimerDocument(Document document);
