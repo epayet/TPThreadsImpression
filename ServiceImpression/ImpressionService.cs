@@ -32,19 +32,19 @@ namespace ServiceImpression
             return imprimante;
         }
 
-        public void SupprimerDocument(Document doc)
+        public void SupprimerDocument(string id)
         {
             foreach (KeyValuePair<string, Imprimante> imprimanteCleValeur in Imprimantes)
             {
                 Imprimante imprimante = imprimanteCleValeur.Value;
-                if (imprimante.EstEnCoursDImpression(doc.Id))
+                if (imprimante.EstEnCoursDImpression(id))
                 {
                     imprimante.AnnulerImpression();
                     break;
                 } 
-                else if(imprimante.GetDocument(doc.Id) != null)
+                else if(imprimante.GetDocument(id) != null)
                 {
-                    imprimante.SupprimerDocumentEnAttente(doc.Id);
+                    imprimante.SupprimerDocumentEnAttente(id);
                     break;
                 }
             }

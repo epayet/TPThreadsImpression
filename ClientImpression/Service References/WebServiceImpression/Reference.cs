@@ -15,9 +15,9 @@ namespace ServeurImpressionThreads.WebServiceImpression {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Document", Namespace="http://schemas.datacontract.org/2004/07/ServiceImpression.Data")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DocumentMessage", Namespace="http://schemas.datacontract.org/2004/07/ServeurImpression.Message")]
     [System.SerializableAttribute()]
-    public partial class Document : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class DocumentMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -92,18 +92,18 @@ namespace ServeurImpressionThreads.WebServiceImpression {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Imprimante", Namespace="http://schemas.datacontract.org/2004/07/ServiceImpression.Data")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImprimanteMessage", Namespace="http://schemas.datacontract.org/2004/07/ServeurImpression.Message")]
     [System.SerializableAttribute()]
-    public partial class Imprimante : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ImprimanteMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<int, ServeurImpressionThreads.WebServiceImpression.Document> DocumentsEnAttenteField;
+        private System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.DocumentMessage> DocumentsEnAttenteField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<string, ServeurImpressionThreads.WebServiceImpression.Document> DocumentsEnErreurField;
+        private System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.DocumentMessage> DocumentsEnErreurField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ServeurImpressionThreads.WebServiceImpression.Etat EtatField;
@@ -125,7 +125,7 @@ namespace ServeurImpressionThreads.WebServiceImpression {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<int, ServeurImpressionThreads.WebServiceImpression.Document> DocumentsEnAttente {
+        public System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.DocumentMessage> DocumentsEnAttente {
             get {
                 return this.DocumentsEnAttenteField;
             }
@@ -138,7 +138,7 @@ namespace ServeurImpressionThreads.WebServiceImpression {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<string, ServeurImpressionThreads.WebServiceImpression.Document> DocumentsEnErreur {
+        public System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.DocumentMessage> DocumentsEnErreur {
             get {
                 return this.DocumentsEnErreurField;
             }
@@ -218,46 +218,46 @@ namespace ServeurImpressionThreads.WebServiceImpression {
     public interface IWebServiceImpression {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/AjouterDocument", ReplyAction="http://tempuri.org/IWebServiceImpression/AjouterDocumentResponse")]
-        ServeurImpressionThreads.WebServiceImpression.Imprimante AjouterDocument(ServeurImpressionThreads.WebServiceImpression.Document document);
+        ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage AjouterDocument(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/AjouterDocument", ReplyAction="http://tempuri.org/IWebServiceImpression/AjouterDocumentResponse")]
-        System.Threading.Tasks.Task<ServeurImpressionThreads.WebServiceImpression.Imprimante> AjouterDocumentAsync(ServeurImpressionThreads.WebServiceImpression.Document document);
+        System.Threading.Tasks.Task<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage> AjouterDocumentAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/SupprimerDocument", ReplyAction="http://tempuri.org/IWebServiceImpression/SupprimerDocumentResponse")]
-        void SupprimerDocument(ServeurImpressionThreads.WebServiceImpression.Document document);
+        void SupprimerDocument(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/SupprimerDocument", ReplyAction="http://tempuri.org/IWebServiceImpression/SupprimerDocumentResponse")]
-        System.Threading.Tasks.Task SupprimerDocumentAsync(ServeurImpressionThreads.WebServiceImpression.Document document);
+        System.Threading.Tasks.Task SupprimerDocumentAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetImprimantes", ReplyAction="http://tempuri.org/IWebServiceImpression/GetImprimantesResponse")]
-        System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.Imprimante> GetImprimantes();
+        System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage> GetImprimantes();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetImprimantes", ReplyAction="http://tempuri.org/IWebServiceImpression/GetImprimantesResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.Imprimante>> GetImprimantesAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage>> GetImprimantesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/AjouterImprimante", ReplyAction="http://tempuri.org/IWebServiceImpression/AjouterImprimanteResponse")]
-        void AjouterImprimante(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante);
+        void AjouterImprimante(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/AjouterImprimante", ReplyAction="http://tempuri.org/IWebServiceImpression/AjouterImprimanteResponse")]
-        System.Threading.Tasks.Task AjouterImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante);
+        System.Threading.Tasks.Task AjouterImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/SupprimerImprimante", ReplyAction="http://tempuri.org/IWebServiceImpression/SupprimerImprimanteResponse")]
-        void SupprimerImprimante(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante);
+        void SupprimerImprimante(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/SupprimerImprimante", ReplyAction="http://tempuri.org/IWebServiceImpression/SupprimerImprimanteResponse")]
-        System.Threading.Tasks.Task SupprimerImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante);
+        System.Threading.Tasks.Task SupprimerImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetDocumentNbPages", ReplyAction="http://tempuri.org/IWebServiceImpression/GetDocumentNbPagesResponse")]
-        int GetDocumentNbPages(ServeurImpressionThreads.WebServiceImpression.Document document);
+        int GetDocumentNbPages(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetDocumentNbPages", ReplyAction="http://tempuri.org/IWebServiceImpression/GetDocumentNbPagesResponse")]
-        System.Threading.Tasks.Task<int> GetDocumentNbPagesAsync(ServeurImpressionThreads.WebServiceImpression.Document document);
+        System.Threading.Tasks.Task<int> GetDocumentNbPagesAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpression", ReplyAction="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpressionResponse")]
-        float GetTempsPrevuPourImpression(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante, ServeurImpressionThreads.WebServiceImpression.Document document);
+        float GetTempsPrevuPourImpression(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante, ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpression", ReplyAction="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpressionResponse")]
-        System.Threading.Tasks.Task<float> GetTempsPrevuPourImpressionAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante, ServeurImpressionThreads.WebServiceImpression.Document document);
+        System.Threading.Tasks.Task<float> GetTempsPrevuPourImpressionAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante, ServeurImpressionThreads.WebServiceImpression.DocumentMessage document);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -287,59 +287,59 @@ namespace ServeurImpressionThreads.WebServiceImpression {
                 base(binding, remoteAddress) {
         }
         
-        public ServeurImpressionThreads.WebServiceImpression.Imprimante AjouterDocument(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage AjouterDocument(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.AjouterDocument(document);
         }
         
-        public System.Threading.Tasks.Task<ServeurImpressionThreads.WebServiceImpression.Imprimante> AjouterDocumentAsync(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public System.Threading.Tasks.Task<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage> AjouterDocumentAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.AjouterDocumentAsync(document);
         }
         
-        public void SupprimerDocument(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public void SupprimerDocument(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             base.Channel.SupprimerDocument(document);
         }
         
-        public System.Threading.Tasks.Task SupprimerDocumentAsync(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public System.Threading.Tasks.Task SupprimerDocumentAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.SupprimerDocumentAsync(document);
         }
         
-        public System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.Imprimante> GetImprimantes() {
+        public System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage> GetImprimantes() {
             return base.Channel.GetImprimantes();
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.Imprimante>> GetImprimantesAsync() {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage>> GetImprimantesAsync() {
             return base.Channel.GetImprimantesAsync();
         }
         
-        public void AjouterImprimante(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante) {
+        public void AjouterImprimante(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante) {
             base.Channel.AjouterImprimante(imprimante);
         }
         
-        public System.Threading.Tasks.Task AjouterImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante) {
+        public System.Threading.Tasks.Task AjouterImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante) {
             return base.Channel.AjouterImprimanteAsync(imprimante);
         }
         
-        public void SupprimerImprimante(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante) {
+        public void SupprimerImprimante(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante) {
             base.Channel.SupprimerImprimante(imprimante);
         }
         
-        public System.Threading.Tasks.Task SupprimerImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante) {
+        public System.Threading.Tasks.Task SupprimerImprimanteAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante) {
             return base.Channel.SupprimerImprimanteAsync(imprimante);
         }
         
-        public int GetDocumentNbPages(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public int GetDocumentNbPages(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.GetDocumentNbPages(document);
         }
         
-        public System.Threading.Tasks.Task<int> GetDocumentNbPagesAsync(ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public System.Threading.Tasks.Task<int> GetDocumentNbPagesAsync(ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.GetDocumentNbPagesAsync(document);
         }
         
-        public float GetTempsPrevuPourImpression(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante, ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public float GetTempsPrevuPourImpression(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante, ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.GetTempsPrevuPourImpression(imprimante, document);
         }
         
-        public System.Threading.Tasks.Task<float> GetTempsPrevuPourImpressionAsync(ServeurImpressionThreads.WebServiceImpression.Imprimante imprimante, ServeurImpressionThreads.WebServiceImpression.Document document) {
+        public System.Threading.Tasks.Task<float> GetTempsPrevuPourImpressionAsync(ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage imprimante, ServeurImpressionThreads.WebServiceImpression.DocumentMessage document) {
             return base.Channel.GetTempsPrevuPourImpressionAsync(imprimante, document);
         }
     }

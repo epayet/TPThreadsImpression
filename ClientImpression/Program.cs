@@ -24,7 +24,7 @@ namespace ServeurImpressionThreads
         private static List<FormImprimante> CreerFenetresImprimantes(WebServiceImpressionClient webServiceClient)
         {
             List<FormImprimante> listeForms = new List<FormImprimante>();
-            foreach (Imprimante uneImp in webServiceClient.GetImprimantes())
+            foreach (ImprimanteMessage uneImp in webServiceClient.GetImprimantes())
             {
                 FormImprimante maFormImp = new FormImprimante(uneImp, webServiceClient);
                 maFormImp.Show();
@@ -36,13 +36,13 @@ namespace ServeurImpressionThreads
         private static WebServiceImpressionClient CreerWebServiceClient()
         {
             WebServiceImpressionClient client = new WebServiceImpressionClient();
-            Imprimante imp1 = new Imprimante
+            ImprimanteMessage imp1 = new ImprimanteMessage
             {
                 Nom = "Imp1",
                 PagesParMinute = 0.01f
             };
             client.AjouterImprimante(imp1);
-            Imprimante imp2 = new Imprimante
+            ImprimanteMessage imp2 = new ImprimanteMessage
             {
                 Nom = "Imp2",
                 PagesParMinute = 0.1f

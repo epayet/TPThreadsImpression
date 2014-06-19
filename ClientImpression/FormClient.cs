@@ -49,7 +49,7 @@ namespace ServeurImpressionThreads
                 for (int i = 0; i < cheminsFichiers.Length; i++)
                 {
                     byte[] contenuDoc = ConvertirDocumentEnBytes(cheminsFichiers[i]);
-                    Document monDoc = new Document
+                    DocumentMessage monDoc = new DocumentMessage
                     {
                         Nom = cheminsFichiers[i],
                         Contenu = contenuDoc

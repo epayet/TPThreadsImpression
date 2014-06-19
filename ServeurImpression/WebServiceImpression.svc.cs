@@ -8,9 +8,11 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using ServeurImpression.Assembleur;
 
 namespace ServeurImpression
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
     public class WebServiceImpression : IWebServiceImpression
     {
         private ImpressionService _impressionService;
@@ -28,43 +30,40 @@ namespace ServeurImpression
             }
         }
 
-        public Imprimante AjouterDocument(DocumentMessage documentMessage)
+        public ImprimanteMessage AjouterDocument(DocumentMessage documentMessage)
         {
-            //TODO
-            Document document = null;
-            Imprimante imprimante = impressionService.AjouterDocument(document);
-            return imprimante;
+            Imprimante imprimante = impressionService.AjouterDocument(documentMessage.ToDocument());
+            return imprimante.ToImprimanteMessage();
         }
 
-        public void SupprimerDocument(Document document)
+        public void SupprimerDocument(DocumentMessage documentMessage)
         {
-            impressionService.SupprimerDocument(document);
+            impressionService.SupprimerDocument(documentMessage.Id);
         }
 
-        public List<Imprimante> GetImprimantes()
+        public List<ImprimanteMessage> GetImprimantes()
         {
-            return impressionService.GetImprimantes();
+            return impressionService.GetImprimantes().ToImprimanteMessage();
         }
 
-        public void AjouterImprimante(Imprimante imprimante)
+        public void AjouterImprimante(ImprimanteMessage imprimanteMessage)
         {
-            impressionService.AjouterImprimante(imprimante);
+            impressionService.AjouterImprimante(imprimanteMessage.ToImprimante());
         }
 
-        public void SupprimerImprimante(Imprimante imprimante)
+        public void SupprimerImprimante(ImprimanteMessage imprimanteMessage)
         {
-            impressionService.SupprimerImprimante(imprimante.Nom);
+            impressionService.SupprimerImprimante(imprimanteMessage.Nom);
         }
 
-
-        public int GetDocumentNbPages(Document document)
+        public int GetDocumentNbPages(DocumentMessage documentMessage)
         {
-            return document.GetNbPages();
+            return documentMessage.ToDocument().GetNbPages();
         }
 
-        public float GetTempsPrevuPourImpression(Imprimante imprimante, Document document)
+        public float GetTempsPrevuPourImpression(ImprimanteMessage imprimanteMessage, DocumentMessage documentMessage)
         {
-            return imprimante.GetTempsPrévuPourDoc(document);
+            return impressionService.GetImprimante(imprimanteMessage.Nom).GetTempsPrévuPourDoc(documentMessage.ToDocument());
         }
     }
 }

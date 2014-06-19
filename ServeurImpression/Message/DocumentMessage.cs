@@ -9,5 +9,13 @@ namespace ServeurImpression.Message
     [DataContract]
     public class DocumentMessage
     {
+        [DataMember]
+        public string Id { get; set; }
+
+        [DataMember]
+        public string Nom { get; set; }
+
+        [DataMember]
+        public byte[] Contenu { get; set; }
     }
 }

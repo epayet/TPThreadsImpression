@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace ServiceImpression.Data
 {
-    [DataContract]
     public class Imprimante
     {
         public string Nom { get; set; }
@@ -218,6 +217,16 @@ namespace ServiceImpression.Data
                     return documentsCleValeur.Key;
             }
             throw new Exception("Document " + id + " non en file d'attente");
+        }
+
+        public List<Document> GetListeDocumentsEnAttente()
+        {
+            List<Document> liste = new List<Document>();
+            foreach (KeyValuePair<int, Document> documentsCleValeur in DocumentsEnAttente)
+            {
+                liste.Add(documentsCleValeur.Value);
+            }
+            return liste;
         }
     }
 }

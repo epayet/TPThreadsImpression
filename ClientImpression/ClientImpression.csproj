@@ -89,7 +89,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\WebServiceImpression\ServeurImpressionThreads.WebServiceImpression.Imprimante.datasource">
+    <None Include="Service References\WebServiceImpression\ServeurImpressionThreads.WebServiceImpression.ImprimanteMessage.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\WebServiceImpression\WebServiceImpression.wsdl" />
@@ -107,7 +107,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

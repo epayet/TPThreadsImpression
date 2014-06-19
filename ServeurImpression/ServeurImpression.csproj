@@ -60,10 +60,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WebServiceImpression.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assembleur\ServiceAssembleur.cs" />
     <Compile Include="Message\DocumentMessage.cs" />
+    <Compile Include="Message\ImprimanteMessage.cs" />
     <Compile Include="WebServiceImpression.svc.cs">
       <DependentUpon>WebServiceImpression.svc</DependentUpon>
     </Compile>

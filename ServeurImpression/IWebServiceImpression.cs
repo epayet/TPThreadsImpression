@@ -14,24 +14,24 @@ namespace ServeurImpression
     public interface IWebServiceImpression
     {
         [OperationContract]
-        Imprimante AjouterDocument(DocumentMessage document);
+        ImprimanteMessage AjouterDocument(DocumentMessage document);
 
         [OperationContract]
-        void SupprimerDocument(Document document);
+        void SupprimerDocument(DocumentMessage document);
 
         [OperationContract]
-        List<Imprimante> GetImprimantes();
+        List<ImprimanteMessage> GetImprimantes();
 
         [OperationContract]
-        void AjouterImprimante(Imprimante imprimante);
+        void AjouterImprimante(ImprimanteMessage imprimante);
 
         [OperationContract]
-        void SupprimerImprimante(Imprimante imprimante);
+        void SupprimerImprimante(ImprimanteMessage imprimante);
 
         [OperationContract]
-        int GetDocumentNbPages(Document document);
+        int GetDocumentNbPages(DocumentMessage document);
 
         [OperationContract]
-        float GetTempsPrevuPourImpression(Imprimante imprimante, Document document);
+        float GetTempsPrevuPourImpression(ImprimanteMessage imprimante, DocumentMessage document);
     }
 }

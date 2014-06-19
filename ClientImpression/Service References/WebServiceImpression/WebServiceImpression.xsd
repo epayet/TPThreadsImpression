@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:55969/WebServiceImpression.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:complexType name="Document">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:55969/WebServiceImpression.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" />
+  <xs:complexType name="DocumentMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Contenu" nillable="true" type="xs:base64Binary" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Document" nillable="true" type="tns:Document" />
-  <xs:complexType name="Imprimante">
+  <xs:element name="DocumentMessage" nillable="true" type="tns:DocumentMessage" />
+  <xs:complexType name="ImprimanteMessage">
     <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DocumentsEnAttente" nillable="true" type="q1:ArrayOfKeyValueOfintDocumentIHsBZtiQ" />
-      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DocumentsEnErreur" nillable="true" type="q2:ArrayOfKeyValueOfstringDocumentIHsBZtiQ" />
-      <xs:element minOccurs="0" name="Etat" type="tns:Etat" />
+      <xs:element minOccurs="0" name="DocumentsEnAttente" nillable="true" type="tns:ArrayOfDocumentMessage" />
+      <xs:element minOccurs="0" name="DocumentsEnErreur" nillable="true" type="tns:ArrayOfDocumentMessage" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" minOccurs="0" name="Etat" type="q1:Etat" />
       <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PagesParMinute" type="xs:float" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Imprimante" nillable="true" type="tns:Imprimante" />
-  <xs:simpleType name="Etat">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="EN_LIGNE" />
-      <xs:enumeration value="HORS_LIGNE" />
-      <xs:enumeration value="ERREUR" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="Etat" nillable="true" type="tns:Etat" />
-  <xs:complexType name="ArrayOfImprimante">
+  <xs:element name="ImprimanteMessage" nillable="true" type="tns:ImprimanteMessage" />
+  <xs:complexType name="ArrayOfDocumentMessage">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Imprimante" nillable="true" type="tns:Imprimante" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentMessage" nillable="true" type="tns:DocumentMessage" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfImprimante" nillable="true" type="tns:ArrayOfImprimante" />
+  <xs:element name="ArrayOfDocumentMessage" nillable="true" type="tns:ArrayOfDocumentMessage" />
+  <xs:complexType name="ArrayOfImprimanteMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImprimanteMessage" nillable="true" type="tns:ImprimanteMessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImprimanteMessage" nillable="true" type="tns:ArrayOfImprimanteMessage" />
 </xs:schema>

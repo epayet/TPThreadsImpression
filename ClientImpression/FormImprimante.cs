@@ -14,10 +14,10 @@ namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
-        private Imprimante monImprimante;
+        private ImprimanteMessage monImprimante;
         private WebServiceImpressionClient webServiceClient;
 
-        public FormImprimante(Imprimante uneImprimante, WebServiceImpressionClient webServiceClient)
+        public FormImprimante(ImprimanteMessage uneImprimante, WebServiceImpressionClient webServiceClient)
         {
             InitializeComponent();
             monImprimante = uneImprimante;
