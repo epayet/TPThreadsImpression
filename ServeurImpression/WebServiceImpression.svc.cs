@@ -9,6 +9,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using ServeurImpression.Assembleur;
+using ServiceImpression.Evenement.Listeners;
 
 namespace ServeurImpression
 {
@@ -21,7 +22,11 @@ namespace ServeurImpression
             get
             {
                 if (_impressionService == null)
+                {
                     _impressionService = new ImpressionService();
+                    _impressionService.AjouterEventListener(new WCFConsoleLogEventListener());
+                    System.Diagnostics.Debug.WriteLine("instance");
+                }
                 return _impressionService;
             }
             set
@@ -46,6 +51,11 @@ namespace ServeurImpression
             return impressionService.GetImprimantes().ToImprimanteMessage();
         }
 
+        public ImprimanteMessage GetImprimante(string nom)
+        {
+            return impressionService.GetImprimante(nom).ToImprimanteMessage();
+        }
+
         public void AjouterImprimante(ImprimanteMessage imprimanteMessage)
         {
             impressionService.AjouterImprimante(imprimanteMessage.ToImprimante());
@@ -64,6 +74,12 @@ namespace ServeurImpression
         public float GetTempsPrevuPourImpression(ImprimanteMessage imprimanteMessage, DocumentMessage documentMessage)
         {
             return impressionService.GetImprimante(imprimanteMessage.Nom).GetTempsPrévuPourDoc(documentMessage.ToDocument());
+        }
+
+        public void AjouterTcpListener(TcpListenerMessage listenerMessage)
+        {
+            TcpClientListener listener = new TcpClientListener(listenerMessage.Addresse, listenerMessage.Port);
+            impressionService.AjouterEventListener(listener);
         }
     }
 }

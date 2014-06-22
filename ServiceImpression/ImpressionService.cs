@@ -13,10 +13,12 @@ namespace ServiceImpression
     public class ImpressionService
     {
         public ConcurrentDictionary<string, Imprimante> Imprimantes { get; private set; }
+        private EventNotifier notifier;
 
         public ImpressionService()
         {
             Imprimantes = new ConcurrentDictionary<string, Imprimante>();
+            this.notifier = new EventNotifier();
         }
 
         public Imprimante AjouterDocument(Document doc)
@@ -59,6 +61,7 @@ namespace ServiceImpression
 
         public void AjouterImprimante(Imprimante nouvelleImprimante)
         {
+            nouvelleImprimante.Notifier = this.notifier;
             Imprimantes.TryAdd(nouvelleImprimante.Nom, nouvelleImprimante);
             Task tacheImprimante = new Task(nouvelleImprimante.Travailler);
             tacheImprimante.Start();
@@ -97,6 +100,16 @@ namespace ServiceImpression
                 }
             }
             return imprimanteLaPlusRapide;
+        }
+
+        public void AjouterEventListener(EventListener listener)
+        {
+            notifier.AjouterListener(listener);
+        }
+
+        public void AnnulerImpression(string id)
+        {
+            
         }
     }
 }

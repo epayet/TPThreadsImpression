@@ -23,6 +23,9 @@ namespace ServeurImpression
         List<ImprimanteMessage> GetImprimantes();
 
         [OperationContract]
+        ImprimanteMessage GetImprimante(string nom);
+
+        [OperationContract]
         void AjouterImprimante(ImprimanteMessage imprimante);
 
         [OperationContract]
@@ -33,5 +36,8 @@ namespace ServeurImpression
 
         [OperationContract]
         float GetTempsPrevuPourImpression(ImprimanteMessage imprimante, DocumentMessage document);
+
+        [OperationContract]
+        void AjouterTcpListener(TcpListenerMessage listener);
     }
 }

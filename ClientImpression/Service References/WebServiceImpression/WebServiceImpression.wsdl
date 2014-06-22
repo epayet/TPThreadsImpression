@@ -26,6 +26,12 @@
   <wsdl:message name="IWebServiceImpression_GetImprimantes_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetImprimantesResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebServiceImpression_GetImprimante_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetImprimante" />
+  </wsdl:message>
+  <wsdl:message name="IWebServiceImpression_GetImprimante_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetImprimanteResponse" />
+  </wsdl:message>
   <wsdl:message name="IWebServiceImpression_AjouterImprimante_InputMessage">
     <wsdl:part name="parameters" element="tns:AjouterImprimante" />
   </wsdl:message>
@@ -50,6 +56,12 @@
   <wsdl:message name="IWebServiceImpression_GetTempsPrevuPourImpression_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTempsPrevuPourImpressionResponse" />
   </wsdl:message>
+  <wsdl:message name="IWebServiceImpression_AjouterTcpListener_InputMessage">
+    <wsdl:part name="parameters" element="tns:AjouterTcpListener" />
+  </wsdl:message>
+  <wsdl:message name="IWebServiceImpression_AjouterTcpListener_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AjouterTcpListenerResponse" />
+  </wsdl:message>
   <wsdl:portType name="IWebServiceImpression">
     <wsdl:operation name="AjouterDocument">
       <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/AjouterDocument" message="tns:IWebServiceImpression_AjouterDocument_InputMessage" />
@@ -62,6 +74,10 @@
     <wsdl:operation name="GetImprimantes">
       <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/GetImprimantes" message="tns:IWebServiceImpression_GetImprimantes_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWebServiceImpression/GetImprimantesResponse" message="tns:IWebServiceImpression_GetImprimantes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImprimante">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/GetImprimante" message="tns:IWebServiceImpression_GetImprimante_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWebServiceImpression/GetImprimanteResponse" message="tns:IWebServiceImpression_GetImprimante_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AjouterImprimante">
       <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/AjouterImprimante" message="tns:IWebServiceImpression_AjouterImprimante_InputMessage" />
@@ -78,6 +94,10 @@
     <wsdl:operation name="GetTempsPrevuPourImpression">
       <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpression" message="tns:IWebServiceImpression_GetTempsPrevuPourImpression_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpressionResponse" message="tns:IWebServiceImpression_GetTempsPrevuPourImpression_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AjouterTcpListener">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWebServiceImpression/AjouterTcpListener" message="tns:IWebServiceImpression_AjouterTcpListener_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWebServiceImpression/AjouterTcpListenerResponse" message="tns:IWebServiceImpression_AjouterTcpListener_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IWebServiceImpression" type="tns:IWebServiceImpression">
@@ -102,6 +122,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetImprimantes">
       <soap:operation soapAction="http://tempuri.org/IWebServiceImpression/GetImprimantes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImprimante">
+      <soap:operation soapAction="http://tempuri.org/IWebServiceImpression/GetImprimante" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -138,6 +167,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetTempsPrevuPourImpression">
       <soap:operation soapAction="http://tempuri.org/IWebServiceImpression/GetTempsPrevuPourImpression" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AjouterTcpListener">
+      <soap:operation soapAction="http://tempuri.org/IWebServiceImpression/AjouterTcpListener" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceImpression.Data;
 using System.Threading;
+using ServiceImpression.Evenement.Listeners;
 
 namespace ServiceImpression
 {
@@ -12,7 +13,9 @@ namespace ServiceImpression
     {
         static void Main(string[] args)
         {
+            ConsoleLogEventListener eventListener = new ConsoleLogEventListener();
             ImpressionService serveur = new ImpressionService();
+            serveur.AjouterEventListener(eventListener);
             Imprimante imp = new Imprimante("imp1", 0.05f);
             serveur.AjouterImprimante(imp);
 

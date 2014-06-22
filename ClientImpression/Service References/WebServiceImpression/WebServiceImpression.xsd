@@ -11,6 +11,7 @@
   <xs:element name="DocumentMessage" nillable="true" type="tns:DocumentMessage" />
   <xs:complexType name="ImprimanteMessage">
     <xs:sequence>
+      <xs:element minOccurs="0" name="DocumentEnCours" nillable="true" type="tns:DocumentMessage" />
       <xs:element minOccurs="0" name="DocumentsEnAttente" nillable="true" type="tns:ArrayOfDocumentMessage" />
       <xs:element minOccurs="0" name="DocumentsEnErreur" nillable="true" type="tns:ArrayOfDocumentMessage" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ServiceImpression.Data" minOccurs="0" name="Etat" type="q1:Etat" />
@@ -31,4 +32,11 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfImprimanteMessage" nillable="true" type="tns:ArrayOfImprimanteMessage" />
+  <xs:complexType name="TcpListenerMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Addresse" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Port" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TcpListenerMessage" nillable="true" type="tns:TcpListenerMessage" />
 </xs:schema>

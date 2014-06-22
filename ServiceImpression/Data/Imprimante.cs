@@ -11,6 +11,8 @@ namespace ServiceImpression.Data
 {
     public class Imprimante
     {
+        public EventNotifier Notifier { get; set; }
+
         public string Nom { get; set; }
 
         public float PagesParMinute { get; set; }
@@ -96,7 +98,7 @@ namespace ServiceImpression.Data
 
         public void Imprimer()
         {
-            Console.WriteLine("Imprimante {0} commence à imprimer", Nom);
+            Notifier.NotifierDebutImpression(this);
 
             RecupererDocumentAImprimer();
 
@@ -106,13 +108,15 @@ namespace ServiceImpression.Data
             while (NbPagesRestantes != 0 && DocumentEnCours != null)
             {
                 Thread.Sleep((int)(tempsDImpressionPourUnePage * 1000));
-                Console.WriteLine("{0}: Page {1} imprimée", Nom, nbPagesImprimees);
+                Notifier.NotifierImpressionPage(this, nbPagesImprimees);
                 NbPagesRestantes--;
                 nbPagesImprimees++;
             }
 
-            if(DocumentEnCours != null)
-                Console.WriteLine("Imprimante {0} a imprimé le document {1}", Nom, DocumentEnCours.Nom);
+            if (DocumentEnCours != null)
+            {
+                Notifier.NotifierFinImpression(this, DocumentEnCours);
+            }
             
             DocumentEnCours = null;
         }
@@ -221,12 +225,7 @@ namespace ServiceImpression.Data
 
         public List<Document> GetListeDocumentsEnAttente()
         {
-            List<Document> liste = new List<Document>();
-            foreach (KeyValuePair<int, Document> documentsCleValeur in DocumentsEnAttente)
-            {
-                liste.Add(documentsCleValeur.Value);
-            }
-            return liste;
+            return new List<Document>(DocumentsEnAttente.Values);
         }
     }
 }

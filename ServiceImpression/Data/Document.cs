@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ServiceImpression.Data
 {
-    [DataContract]
     public class Document
     {
         public string Id { get; private set; }
@@ -29,7 +28,8 @@ namespace ServiceImpression.Data
 
         public int GetNbPages()
         {
-            return Contenu.Length / 100000;
+            float nbPages = Contenu.Length / 100000f;
+            return (int)Math.Ceiling(nbPages);
         }
 
         public Document Clone()

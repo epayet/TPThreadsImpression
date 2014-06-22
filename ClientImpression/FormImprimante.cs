@@ -14,87 +14,82 @@ namespace ServeurImpressionThreads
 {
     public partial class FormImprimante : Form
     {
-        private ImprimanteMessage monImprimante;
+        private ImprimanteMessage imprimante;
         private WebServiceImpressionClient webServiceClient;
 
-        public FormImprimante(ImprimanteMessage uneImprimante, WebServiceImpressionClient webServiceClient)
+        public FormImprimante(ImprimanteMessage imprimante, WebServiceImpressionClient webServiceClient)
         {
             InitializeComponent();
-            monImprimante = uneImprimante;
+            this.imprimante = imprimante;
             this.webServiceClient = webServiceClient;
-            this.Text = uneImprimante.Nom;
-            this.Name = uneImprimante.Nom;
+            this.Text = imprimante.Nom;
+            this.Name = imprimante.Nom;
         }
 
-        private void FormImprimante_Load(object sender, EventArgs e)
+        public void MAJImprimante()
         {
-            listBoxImpressionsImprimante.Items.Clear();
-            backgroundWorkerImprimante.RunWorkerAsync();
-        }
-
-        private void backgroundWorkerImprimante_DoWork(object sender, DoWorkEventArgs e)
-        {
-            MAJProgressBar(e);
-        }
-
-        private void backgroundWorkerImprimante_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            progressBarImpression.Value = e.ProgressPercentage;
-        }
-
-        public void MAJListeDocuments()
-        {
-            listBoxImpressionsImprimante.Items.Clear();
-            for (int i = 0; i < monImprimante.DocumentsEnAttente.Count; i++)
+            ImprimanteMessage impMessage = webServiceClient.GetImprimante(this.Name);
+            if (impMessage.DocumentEnCours != null)
             {
-                listBoxImpressionsImprimante.Items.Add(monImprimante.DocumentsEnAttente[i].ToString());
-            }
-        }
+                labelNomFichierEnCours.Invoke(new Action(() => labelNomFichierEnCours.Text = impMessage.DocumentEnCours.Nom));
 
-        void MAJProgressBar(DoWorkEventArgs e)
-        {
-            if (backgroundWorkerImprimante.CancellationPending == false)
-            {
-                //Met à jour la progressbar suivant le fichier en cours d'impression
-                int nombrePagesTotalDocument = webServiceClient.GetDocumentNbPages(monImprimante.DocumentsEnAttente[0]);
-                double pourcentage = 0;
-                for (int i = 0; i < nombrePagesTotalDocument; i++)
-                {
-                    //MAJ du % de la progressBar
-                    float tempsPrevu = webServiceClient.GetTempsPrevuPourImpression(monImprimante, monImprimante.DocumentsEnAttente[0]);
-                    pourcentage = tempsPrevu / i * 100;
-                    backgroundWorkerImprimante.ReportProgress((int)pourcentage);
+                //labelNomFichierEnCours.Text = impMessage.DocumentEnCours.Nom;
+                progressBarImpression.Invoke(new Action(() => progressBarImpression.Maximum = webServiceClient.GetDocumentNbPages(impMessage.DocumentEnCours)));
 
-                    //Sleep (pendant le temps d'imrpession d'une page)
-                    float tempsImpressionUnePageDuDoc = tempsPrevu / nombrePagesTotalDocument * 1000;
-                    Thread.Sleep((int)tempsImpressionUnePageDuDoc);
-                }
+                //progressBarImpression.Maximum = webServiceClient.GetDocumentNbPages(impMessage.DocumentEnCours);
             }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
+            listBoxDocumentsEnAttente.Invoke(new Action(() => listBoxDocumentsEnAttente.Items.Clear()));
 
-        private void backgroundWorkerImprimante_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //Quand doc imprimé, enlève doc de la liste
-            if (e.Cancelled == false)
+            //listBoxDocumentsEnAttente.Items.Clear();
+            foreach (DocumentMessage documentEnAttente in impMessage.DocumentsEnAttente)
             {
-                if (listBoxImpressionsImprimante.Items.Count != 0)
-                {
-                    listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.Items[0]);
-                }
+                listBoxDocumentsEnAttente.Invoke(new Action(() =>  listBoxDocumentsEnAttente.Items.Add(documentEnAttente.Nom)));
+
+                //listBoxDocumentsEnAttente.Items.Add(documentEnAttente.Nom);
             }
-            else
-                MessageBox.Show("Opération annulée");
+            isReady = true;
+            imprimante = impMessage;
         }
 
         private void boutonAnulerImpression_Click(object sender, EventArgs e)
         {
-            listBoxImpressionsImprimante.Items.Remove(listBoxImpressionsImprimante.SelectedItem);
-            //monImprimante.AnnulerImpression(listBoxImpressionsImprimante.SelectedItem);
+            listBoxDocumentsEnAttente.Items.Remove(listBoxDocumentsEnAttente.SelectedItem);
+            DocumentMessage documentASupprimer = getDocument(listBoxDocumentsEnAttente.SelectedItem.ToString());
+            webServiceClient.SupprimerDocument(documentASupprimer);
         }
 
+        private DocumentMessage getDocument(string nom)
+        {
+            foreach (DocumentMessage documentEnAttente in imprimante.DocumentsEnAttente)
+            {
+                if (documentEnAttente.Nom == nom)
+                    return documentEnAttente;
+            }
+            return null;
+        }
+
+
+        public void DebutImpression()
+        {
+            MAJImprimante();
+            pagesImprimees = 0;
+        }
+
+        public void FinImpression()
+        {
+            isReady = false;
+        }
+
+        public void ImpressionPage()
+        {
+            pagesImprimees++;
+            if(isReady)
+                progressBarImpression.Invoke(new Action(() => progressBarImpression.Value = pagesImprimees));
+            
+        }
+
+        public int pagesImprimees { get; set; }
+
+        public bool isReady { get; set; }
     }
 }

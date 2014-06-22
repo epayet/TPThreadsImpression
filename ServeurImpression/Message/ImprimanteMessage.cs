@@ -20,10 +20,13 @@ namespace ServeurImpression.Message
         public Etat Etat { get; set; }
 
         [DataMember]
-        public List<DocumentMessage> DocumentsEnAttente = new List<DocumentMessage>();
+        public List<DocumentMessage> DocumentsEnAttente {get;set;}
 
         [DataMember]
-        public List<DocumentMessage> DocumentsEnErreur = new List<DocumentMessage>();
+        public DocumentMessage DocumentEnCours { get; set; }
+
+        [DataMember]
+        public List<DocumentMessage> DocumentsEnErreur { get; set; }
 
 
     }

@@ -15,49 +15,54 @@ namespace ServeurImpressionThreads
 {
     public partial class FormClient : Form
     {
-        private List<FormImprimante> listeFormsImprimantes;
+        private Dictionary<string, FormImprimante> listeFormsImprimantes;
         private WebServiceImpressionClient webServiceClient;
 
-        public FormClient(WebServiceImpressionClient webServiceClient, List<FormImprimante> listeFormsImp)
+        public FormClient(WebServiceImpressionClient webServiceClient, Dictionary<string, FormImprimante> listeFormsImp)
         {
             InitializeComponent();
             this.webServiceClient = webServiceClient;
             listeFormsImprimantes = listeFormsImp;
         }
 
-        public byte[] ConvertirDocumentEnBytes(String cheminFichier)
-        {
-            byte[] contenu = File.ReadAllBytes(cheminFichier);
-            return contenu;
-        }
-
-
         private void buttonAjouterFichier_Click(object sender, EventArgs e)
         {
-            //Ouvre une fenêtre de recherche et récupère les chemins des fichiers sélectionnés
-            OpenFileDialog monOpenFileDialog = new OpenFileDialog();
-            monOpenFileDialog.Multiselect = true;
-            monOpenFileDialog.RestoreDirectory = true;
-            monOpenFileDialog.Title = "Choisissez les fichiers à imprimer";
+            List<String> cheminsFichiers = demanderFichiers();
 
-            monOpenFileDialog.ShowDialog();
-            String[] cheminsFichiers = monOpenFileDialog.FileNames;
-
-            //Envoie chaque fichier sélectionné au serveur
-            if (cheminsFichiers.Length != 0)
+            foreach (string cheminFichier in cheminsFichiers)
             {
-                for (int i = 0; i < cheminsFichiers.Length; i++)
-                {
-                    byte[] contenuDoc = ConvertirDocumentEnBytes(cheminsFichiers[i]);
-                    DocumentMessage monDoc = new DocumentMessage
-                    {
-                        Nom = cheminsFichiers[i],
-                        Contenu = contenuDoc
-                    };
-                    listBoxFichierAImprimer.Items.Add(cheminsFichiers[i]);
-                    webServiceClient.AjouterDocument(monDoc);
-                }
+                string nomFichier = cheminFichier.Split('\\').Last();
+                byte[] contenu = File.ReadAllBytes(cheminFichier);
+                DocumentMessage doc = creerDocument(nomFichier, contenu);
+
+                listBoxFichierAImprimer.Items.Add(nomFichier);
+                ImprimanteMessage imp = webServiceClient.AjouterDocument(doc);
+                
+                FormImprimante formImprimante;
+                listeFormsImprimantes.TryGetValue(imp.Nom, out formImprimante);
+                //formImprimante.MAJImprimante();
             }
+        }
+
+        private DocumentMessage creerDocument(string cheminFichier, byte[] contenu)
+        {
+            DocumentMessage doc = new DocumentMessage
+            {
+                Nom = cheminFichier,
+                Contenu = contenu
+            };
+            return doc;
+        }
+
+        private List<string> demanderFichiers()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Title = "Choisissez les fichiers à imprimer";
+
+            openFileDialog.ShowDialog();
+            return new List<string> (openFileDialog.FileNames);
         }
 
         private void buttonSupprimer_Click(object sender, EventArgs e)
@@ -65,17 +70,5 @@ namespace ServeurImpressionThreads
             listBoxFichierAImprimer.Items.Remove(listBoxFichierAImprimer.SelectedItem);
             //monServeur.SupprimerDocument(listBoxFichierAImprimer.SelectedItem.ToString());
         }
-
-        public void MAJListeImpressionsImprimante(String nomImp)
-        {
-            foreach (FormImprimante uneFormImp in listeFormsImprimantes)
-            {
-                if (uneFormImp.Name == nomImp)
-                {
-                    uneFormImp.MAJListeDocuments();
-                }
-            }
-        }
-
     }
 }

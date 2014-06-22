@@ -39,10 +39,24 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetImprimante">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetImprimanteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="GetImprimanteResult" nillable="true" type="q5:ImprimanteMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AjouterImprimante">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q5:ImprimanteMessage" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q6:ImprimanteMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -54,7 +68,7 @@
   <xs:element name="SupprimerImprimante">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q6:ImprimanteMessage" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q7:ImprimanteMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -66,7 +80,7 @@
   <xs:element name="GetDocumentNbPages">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="document" nillable="true" type="q7:DocumentMessage" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="document" nillable="true" type="q8:DocumentMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -80,8 +94,8 @@
   <xs:element name="GetTempsPrevuPourImpression">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q8:ImprimanteMessage" />
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="document" nillable="true" type="q9:DocumentMessage" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="imprimante" nillable="true" type="q9:ImprimanteMessage" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="document" nillable="true" type="q10:DocumentMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -90,6 +104,18 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="GetTempsPrevuPourImpressionResult" type="xs:float" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AjouterTcpListener">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ServeurImpression.Message" minOccurs="0" name="listener" nillable="true" type="q11:TcpListenerMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AjouterTcpListenerResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>

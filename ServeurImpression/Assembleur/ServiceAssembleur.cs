@@ -16,6 +16,8 @@ namespace ServeurImpression.Assembleur
 
         public static DocumentMessage ToDocumentMessage(this Document document)
         {
+            if (document == null)
+                return null;
             return new DocumentMessage
             {
                 Contenu = document.Contenu,
@@ -46,7 +48,8 @@ namespace ServeurImpression.Assembleur
                 Etat = imprimante.Etat,
                 Nom = imprimante.Nom,
                 PagesParMinute = imprimante.PagesParMinute,
-                DocumentsEnAttente = imprimante.GetListeDocumentsEnAttente().ToDocumentMessage()
+                DocumentsEnAttente = imprimante.GetListeDocumentsEnAttente().ToDocumentMessage(),
+                DocumentEnCours = imprimante.DocumentEnCours.ToDocumentMessage()
             };
         }
 

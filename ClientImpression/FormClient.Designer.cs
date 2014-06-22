@@ -31,80 +31,48 @@
             this.listBoxFichierAImprimer = new System.Windows.Forms.ListBox();
             this.labelClient = new System.Windows.Forms.Label();
             this.buttonAjouterFichier = new System.Windows.Forms.Button();
-            this.listBoxEnCours = new System.Windows.Forms.ListBox();
-            this.buttonSupprimer = new System.Windows.Forms.Button();
-            this.labelListeImpressionEnCours = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listBoxFichierAImprimer
             // 
             this.listBoxFichierAImprimer.FormattingEnabled = true;
-            this.listBoxFichierAImprimer.ItemHeight = 16;
-            this.listBoxFichierAImprimer.Location = new System.Drawing.Point(46, 80);
+            this.listBoxFichierAImprimer.Location = new System.Drawing.Point(34, 65);
+            this.listBoxFichierAImprimer.Margin = new System.Windows.Forms.Padding(2);
             this.listBoxFichierAImprimer.Name = "listBoxFichierAImprimer";
-            this.listBoxFichierAImprimer.Size = new System.Drawing.Size(357, 116);
+            this.listBoxFichierAImprimer.Size = new System.Drawing.Size(269, 95);
             this.listBoxFichierAImprimer.TabIndex = 0;
             // 
             // labelClient
             // 
             this.labelClient.AutoSize = true;
             this.labelClient.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelClient.Location = new System.Drawing.Point(41, 37);
+            this.labelClient.Location = new System.Drawing.Point(31, 30);
+            this.labelClient.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelClient.Name = "labelClient";
-            this.labelClient.Size = new System.Drawing.Size(393, 25);
+            this.labelClient.Size = new System.Drawing.Size(317, 20);
             this.labelClient.TabIndex = 1;
             this.labelClient.Text = "Veuillez sélectionner les fichiers à imprimer :";
             // 
             // buttonAjouterFichier
             // 
-            this.buttonAjouterFichier.Location = new System.Drawing.Point(422, 80);
+            this.buttonAjouterFichier.Location = new System.Drawing.Point(316, 65);
+            this.buttonAjouterFichier.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAjouterFichier.Name = "buttonAjouterFichier";
-            this.buttonAjouterFichier.Size = new System.Drawing.Size(94, 36);
+            this.buttonAjouterFichier.Size = new System.Drawing.Size(70, 29);
             this.buttonAjouterFichier.TabIndex = 2;
             this.buttonAjouterFichier.Text = "Ajouter";
             this.buttonAjouterFichier.UseVisualStyleBackColor = true;
             this.buttonAjouterFichier.Click += new System.EventHandler(this.buttonAjouterFichier_Click);
             // 
-            // listBoxEnCours
-            // 
-            this.listBoxEnCours.FormattingEnabled = true;
-            this.listBoxEnCours.ItemHeight = 16;
-            this.listBoxEnCours.Location = new System.Drawing.Point(46, 261);
-            this.listBoxEnCours.Name = "listBoxEnCours";
-            this.listBoxEnCours.Size = new System.Drawing.Size(211, 100);
-            this.listBoxEnCours.TabIndex = 3;
-            // 
-            // buttonSupprimer
-            // 
-            this.buttonSupprimer.Location = new System.Drawing.Point(422, 123);
-            this.buttonSupprimer.Name = "buttonSupprimer";
-            this.buttonSupprimer.Size = new System.Drawing.Size(94, 36);
-            this.buttonSupprimer.TabIndex = 4;
-            this.buttonSupprimer.Text = "Supprimer";
-            this.buttonSupprimer.UseVisualStyleBackColor = true;
-            this.buttonSupprimer.Click += new System.EventHandler(this.buttonSupprimer_Click);
-            // 
-            // labelListeImpressionEnCours
-            // 
-            this.labelListeImpressionEnCours.AutoSize = true;
-            this.labelListeImpressionEnCours.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelListeImpressionEnCours.Location = new System.Drawing.Point(43, 220);
-            this.labelListeImpressionEnCours.Name = "labelListeImpressionEnCours";
-            this.labelListeImpressionEnCours.Size = new System.Drawing.Size(290, 25);
-            this.labelListeImpressionEnCours.TabIndex = 6;
-            this.labelListeImpressionEnCours.Text = "Liste des impressions en cours :";
-            // 
             // FormClient
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(642, 418);
-            this.Controls.Add(this.labelListeImpressionEnCours);
-            this.Controls.Add(this.buttonSupprimer);
-            this.Controls.Add(this.listBoxEnCours);
+            this.ClientSize = new System.Drawing.Size(414, 192);
             this.Controls.Add(this.buttonAjouterFichier);
             this.Controls.Add(this.labelClient);
             this.Controls.Add(this.listBoxFichierAImprimer);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormClient";
             this.Text = "Client";
             this.ResumeLayout(false);
@@ -117,9 +85,6 @@
         private System.Windows.Forms.ListBox listBoxFichierAImprimer;
         private System.Windows.Forms.Label labelClient;
         private System.Windows.Forms.Button buttonAjouterFichier;
-        private System.Windows.Forms.ListBox listBoxEnCours;
-        private System.Windows.Forms.Button buttonSupprimer;
-        private System.Windows.Forms.Label labelListeImpressionEnCours;
     }
 }
 
