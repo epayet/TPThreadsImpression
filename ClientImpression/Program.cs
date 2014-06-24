@@ -67,7 +67,9 @@ namespace ServeurImpressionThreads
             try
             {
                 // Set the TcpListener on port 13000.
-                Int32 port = 13000;
+                Random r = new Random();
+                int randomPort = r.Next(13000, 13100);
+                Int32 port = randomPort;
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
                 // TcpListener server = new TcpListener(port);

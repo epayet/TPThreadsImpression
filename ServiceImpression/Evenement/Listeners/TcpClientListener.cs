@@ -36,19 +36,30 @@ namespace ServiceImpression.Evenement.Listeners
 
         private void Envoyer(string message)
         {
-            TcpClient client = new TcpClient(addresse, port);
+            TcpClient client = null;
+            NetworkStream stream = null;
+            try
+            {
+                client = new TcpClient(addresse, port);
 
-            // Translate the passed message into ASCII and store it as a Byte array.
-            Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                // Translate the passed message into ASCII and store it as a Byte array.
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
-            NetworkStream stream = client.GetStream();
+                stream = client.GetStream();
 
-            // Send the message to the connected TcpServer. 
-            stream.Write(data, 0, data.Length);
+                // Send the message to the connected TcpServer. 
+                stream.Write(data, 0, data.Length);
+            }
+            catch (SocketException)
+            {
 
-            // Close everything.
-            stream.Close();
-            client.Close();
+            }
+            finally
+            {
+                // Close everything.
+                stream.Close();
+                client.Close();
+            }
         }
     }
 }
