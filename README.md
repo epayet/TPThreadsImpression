@@ -1,16 +1,9 @@
 TPThreadsImpression
 ===================
 
-TP EPSI MultiThreads C#
+Instructions de lancement
 
-* Interface graphique IN PROGRESS
-* Pool d'imprimantes REFACTO
-    * Commande plutot qu'attente
-    * Verrou
-* Serveur DONE!
-    * 3 communications
-        * Annuler
-        * Ajouter
-        * Get infos
-        
-* Communication (TCP/socket) IN PROGRESS
+* Lancer le projet ServeurImpressions (projet de démarrage)
+* Vous pouvez ensuite l'arrêter
+* Mettre le client en projet de démarrage (ClientImpression)
+* Lancer le client
